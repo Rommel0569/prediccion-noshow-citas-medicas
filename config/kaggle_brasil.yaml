@@ -1,0 +1,62 @@
+# Configuración para el dataset público de Brasil (Kaggle, KaggleV2-May-2016.csv).
+# Para aplicar el sistema en otro establecimiento, copie config/plantilla_otro_lugar.yaml
+# y cambie solo los nombres de columnas y los parámetros locales.
+
+nombre: "Brasil - Kaggle Medical Appointment No Shows (2016)"
+archivo_datos: "../datos/KaggleV2-May-2016.csv"
+
+# Nombre de cada columna estándar en el archivo de origen
+columnas:
+  id_paciente: PatientId
+  id_cita: AppointmentID
+  sexo: Gender
+  fecha_registro: ScheduledDay
+  fecha_cita: AppointmentDay
+  edad: Age
+  zona: Neighbourhood
+  subsidio: Scholarship          # programa social o seguro subsidiado
+  hipertension: Hipertension
+  diabetes: Diabetes
+  recordatorio: SMS_received     # opcional: solo para medir el efecto del aviso
+  falto: No-show
+
+valores:
+  falto_si: ["Yes"]              # valores que significan "no asistió"
+  sexo_femenino: ["F"]
+  verdadero: [1, "1", "Si", "Sí", "SI", "True", "true", "yes", "Yes"]
+
+entrenamiento:
+  proporcion_validacion: 0.2     # partición temporal: las últimas fechas son prueba
+  proporcion_prueba: 0.2
+  suavizado_zona: 50             # citas "virtuales" para suavizar la tasa de zonas pequeñas
+  semilla: 42
+
+# Niveles de riesgo por capacidad de contacto: porcentaje de citas con mayor riesgo
+niveles:
+  alto_percentil: 0.20           # 20 % con mayor riesgo -> nivel alto
+  medio_percentil: 0.30          # siguiente 30 % -> nivel medio
+
+# Costo unitario por canal (soles). Reemplazar por cotizaciones locales.
+costos:
+  whatsapp: 0.089                # supuesto: igual que SMS hasta tener cotización local
+  sms: 0.089                     # SMSPERU, tarifa base por SMS (ref. [24])
+  llamada: 2.40                  # ref. internacional £0,50 por llamada manual (ref. [23]), convertido aprox.
+  visita: 25.00                  # supuesto a reemplazar con el costo real del establecimiento
+  valor_consulta: 30.00             # supuesto: costo de una consulta perdida; reemplazar por el costo real local
+
+# Reducción relativa de la inasistencia por canal (evidencia, sección 3.5.1 Tabla E)
+efecto_canal:
+  whatsapp: 0.29                 # recordatorio automatizado (Hasvold y Wootton, 28,9 %)
+  sms: 0.29
+  llamada: 0.39                  # llamada manual (39,1 %)
+  visita: 0.39                   # supuesto: igual que llamada (sin evidencia directa)
+  ninguno: 0.0
+
+# Probabilidad de contar con cada canal, usada SOLO para simular cuando el archivo
+# no trae la columna canal_disponible (INEI, II trimestre 2025)
+canales_simulados:
+  general:     {whatsapp: 0.802, sms_voz: 0.107, ninguno: 0.091}
+  adulto_mayor: {whatsapp: 0.483, sms_voz: 0.365, ninguno: 0.152}
+
+reasignacion:
+  horas_limite_confirmacion: 24  # si un caso de riesgo alto no confirma a esta hora, se libera el cupo

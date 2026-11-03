@@ -1,0 +1,101 @@
+id_cita,fecha_cita,dias_anticipacion,dia_semana,edad,zona,subsidio,faltas_previas,canal_disponible,probabilidad,nivel,canal_accion,accion,costo,marcada_por_modelo,falto
+5670862,2016-06-08,33,2,22,RESISTÊNCIA,0,2,sms_voz,0.5213,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,True,0
+5628149,2016-06-03,37,4,13,CARATOÍRA,0,1,ninguno,0.4927,alto,visita,Visita domiciliaria o agente comunitario; confirmar o reprogramar,25.0,True,0
+5700890,2016-06-06,21,0,15,SOLON BORGES,0,3,whatsapp,0.4311,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,True,0
+5722661,2016-06-06,17,0,0,ANTÔNIO HONÓRIO,0,2,whatsapp,0.4263,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,True,0
+5663292,2016-06-03,29,4,15,JESUS DE NAZARETH,0,0,whatsapp,0.4217,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,True,0
+5698297,2016-06-01,16,2,26,ILHA DO PRÍNCIPE,0,0,whatsapp,0.4058,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,True,0
+5634238,2016-06-01,34,2,6,CENTRO,0,1,whatsapp,0.3974,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,True,0
+5698183,2016-06-06,21,0,34,CARATOÍRA,0,0,whatsapp,0.3968,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,True,0
+5642061,2016-06-03,35,4,32,ITARARÉ,0,0,whatsapp,0.3918,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,True,1
+5654072,2016-06-08,36,2,9,SANTA TEREZA,0,1,whatsapp,0.3858,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,True,1
+5663868,2016-06-07,33,1,30,SANTA CECÍLIA,0,0,whatsapp,0.3835,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,True,1
+5702242,2016-06-08,23,2,25,DA PENHA,1,0,whatsapp,0.3807,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,True,0
+5704739,2016-06-06,21,0,82,CARATOÍRA,0,1,whatsapp,0.3806,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,True,1
+5698303,2016-06-03,18,4,36,GURIGICA,1,0,whatsapp,0.3802,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,True,0
+5575128,2016-06-03,52,4,18,MONTE BELO,0,0,whatsapp,0.3762,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,True,1
+5712457,2016-06-01,14,2,46,DA PENHA,0,1,whatsapp,0.3707,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,True,0
+5682774,2016-06-07,28,1,37,JARDIM DA PENHA,0,3,whatsapp,0.3671,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,True,0
+5631148,2016-06-03,37,4,16,MARIA ORTIZ,0,0,whatsapp,0.3665,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,True,0
+5676742,2016-06-07,29,1,1,SÃO JOSÉ,0,0,whatsapp,0.3625,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,True,0
+5701855,2016-06-03,18,4,47,ITARARÉ,0,0,whatsapp,0.3575,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,True,0
+5633792,2016-06-01,34,2,8,PIEDADE,0,1,whatsapp,0.3491,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,False,0
+5733597,2016-06-02,9,3,15,UNIVERSITÁRIO,0,1,whatsapp,0.3451,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,False,0
+5717068,2016-06-01,13,2,13,CRUZAMENTO,0,0,whatsapp,0.3375,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,False,0
+5701166,2016-06-01,16,2,3,MARUÍPE,0,0,whatsapp,0.324,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",0.178,False,0
+5619451,2016-06-06,41,0,25,SANTA MARTHA,0,0,whatsapp,0.3239,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",0.178,False,0
+5600209,2016-06-06,48,0,0,RESISTÊNCIA,0,0,sms_voz,0.3227,medio,sms,"Recordatorio con pedido de confirmación; si no responde, llamada",0.178,False,0
+5719307,2016-06-02,14,3,20,NOVA PALESTINA,0,0,whatsapp,0.3216,medio,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,False,0
+5556029,2016-06-02,56,3,42,MONTE BELO,0,0,ninguno,0.321,medio,ninguno,Actualizar contacto; avisar por el centro de salud de referencia,0.0,False,0
+5711500,2016-06-07,20,1,38,DA PENHA,0,0,whatsapp,0.3206,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",0.178,False,0
+5704761,2016-06-01,16,2,41,BENTO FERREIRA,0,0,whatsapp,0.3194,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",0.178,False,0
+5767702,2016-06-08,5,2,25,CARATOÍRA,0,0,whatsapp,0.3188,medio,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,False,0
+5703660,2016-06-08,23,2,25,SANTA MARTHA,0,0,whatsapp,0.3164,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",0.178,False,1
+5736722,2016-06-08,14,2,20,MORADA DE CAMBURI,0,0,whatsapp,0.3114,medio,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,False,0
+5722121,2016-06-01,12,2,3,SANTO ANDRÉ,0,0,whatsapp,0.3114,medio,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,False,1
+5719989,2016-06-02,14,3,1,RESISTÊNCIA,0,0,whatsapp,0.3087,medio,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,False,0
+5729589,2016-06-07,14,1,27,SÃO CRISTÓVÃO,0,0,whatsapp,0.3069,medio,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,False,1
+5699372,2016-06-03,18,4,45,PARQUE MOSCOSO,0,0,whatsapp,0.3046,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",0.178,False,0
+5761718,2016-06-06,4,0,21,DA PENHA,1,0,whatsapp,0.3032,medio,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,False,0
+5720900,2016-06-03,15,4,42,SÃO PEDRO,0,0,whatsapp,0.2982,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",0.178,False,1
+5721465,2016-06-07,19,1,35,SANTA HELENA,0,0,whatsapp,0.2979,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",0.178,False,1
+5676476,2016-06-02,24,3,9,JABOUR,0,0,whatsapp,0.2972,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",0.178,False,1
+5716470,2016-06-06,19,0,45,ILHA DE SANTA MARIA,0,0,sms_voz,0.2898,medio,sms,"Recordatorio con pedido de confirmación; si no responde, llamada",0.178,False,0
+5682172,2016-06-07,28,1,46,BONFIM,0,0,ninguno,0.2898,medio,ninguno,Actualizar contacto; avisar por el centro de salud de referencia,0.0,False,0
+5740177,2016-06-01,7,2,10,DO QUADRO,0,3,whatsapp,0.2847,medio,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,False,0
+5767938,2016-06-08,5,2,25,SÃO PEDRO,0,0,whatsapp,0.2792,medio,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,False,0
+5750366,2016-06-08,8,2,17,TABUAZEIRO,0,0,whatsapp,0.2769,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",0.178,False,0
+5746745,2016-06-06,7,0,19,SANTA LUÍZA,0,0,whatsapp,0.2762,medio,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,False,1
+5774484,2016-06-07,1,1,17,JABOUR,0,1,whatsapp,0.2708,medio,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,False,0
+5758558,2016-06-06,5,0,36,BOA VISTA,0,0,ninguno,0.2688,medio,ninguno,Actualizar contacto; avisar por el centro de salud de referencia,0.0,False,0
+5718190,2016-06-02,14,3,33,JARDIM DA PENHA,0,0,sms_voz,0.2638,medio,sms,"Recordatorio con pedido de confirmación; si no responde, llamada",0.178,False,0
+5719285,2016-06-01,13,2,32,JOANA D´ARC,0,0,whatsapp,0.2638,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",0.178,False,0
+5735878,2016-06-02,8,3,3,SANTO ANDRÉ,0,0,ninguno,0.2577,medio,ninguno,Actualizar contacto; avisar por el centro de salud de referencia,0.0,False,0
+5664127,2016-06-07,33,1,51,SANTO ANDRÉ,0,0,whatsapp,0.2541,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",0.178,False,0
+5716914,2016-06-03,15,4,49,SÃO JOSÉ,0,0,whatsapp,0.2507,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",0.178,False,0
+5665458,2016-06-07,33,1,0,SOLON BORGES,0,0,whatsapp,0.2494,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",0.178,False,0
+5774132,2016-06-08,2,2,31,NOVA PALESTINA,0,0,whatsapp,0.2476,medio,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,False,0
+5730475,2016-06-06,13,0,46,SANTA MARTHA,0,0,whatsapp,0.2469,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",0.178,False,1
+5766649,2016-06-06,4,0,33,BONFIM,0,0,whatsapp,0.242,medio,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,False,0
+5752237,2016-06-07,7,1,69,SÃO PEDRO,0,2,whatsapp,0.2411,medio,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,False,0
+5744781,2016-06-03,4,4,49,CARATOÍRA,0,0,whatsapp,0.2402,medio,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",2.489,False,0
+5701212,2016-06-01,16,2,51,PRAIA DO SUÁ,0,0,whatsapp,0.24,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",0.178,False,1
+5633316,2016-06-08,41,2,56,SANTA MARTHA,1,0,sms_voz,0.2376,medio,sms,"Recordatorio con pedido de confirmación; si no responde, llamada",0.178,False,0
+5750050,2016-06-08,8,2,41,SANTA MARTHA,0,0,whatsapp,0.232,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",0.178,False,0
+5733801,2016-06-08,15,2,43,JARDIM DA PENHA,0,0,whatsapp,0.226,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",0.178,False,0
+5748236,2016-06-02,3,3,26,TABUAZEIRO,0,0,ninguno,0.2251,medio,ninguno,Actualizar contacto; avisar por el centro de salud de referencia,0.0,False,0
+5757286,2016-06-02,1,3,41,CARATOÍRA,1,0,whatsapp,0.2233,medio,whatsapp,Recordatorio automático,0.089,False,1
+5735608,2016-06-01,7,2,82,ILHA DO PRÍNCIPE,0,0,whatsapp,0.221,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",0.178,False,0
+5779111,2016-06-08,2,2,40,RESISTÊNCIA,0,0,whatsapp,0.2204,medio,whatsapp,Recordatorio automático,0.089,False,0
+5781691,2016-06-08,1,2,32,SÃO JOSÉ,0,0,whatsapp,0.2179,medio,whatsapp,Recordatorio automático,0.089,False,0
+5747353,2016-06-02,3,3,34,JARDIM DA PENHA,0,1,whatsapp,0.2151,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",0.178,False,1
+5757215,2016-06-03,2,4,9,JUCUTUQUARA,0,0,whatsapp,0.2143,medio,whatsapp,Recordatorio automático,0.089,False,0
+5741734,2016-06-02,3,3,7,BONFIM,0,0,whatsapp,0.2126,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",0.178,False,0
+5715921,2016-06-06,19,0,66,PRAIA DO SUÁ,0,0,sms_voz,0.2108,medio,sms,"Recordatorio con pedido de confirmación; si no responde, llamada",0.178,False,0
+5718271,2016-06-01,13,2,78,ROMÃO,0,0,sms_voz,0.2089,bajo,sms,Recordatorio automático,0.178,False,1
+5631446,2016-06-08,41,2,57,ILHA DE SANTA MARIA,0,0,sms_voz,0.2069,bajo,sms,Recordatorio automático,0.178,False,0
+5759918,2016-06-03,2,4,77,DA PENHA,0,2,whatsapp,0.2068,bajo,whatsapp,Recordatorio automático,0.089,False,0
+5537307,2016-06-08,68,2,76,JARDIM CAMBURI,0,0,sms_voz,0.2065,bajo,sms,Recordatorio automático,0.178,False,0
+5759803,2016-06-07,6,1,72,JARDIM CAMBURI,0,1,sms_voz,0.2026,bajo,sms,Recordatorio automático,0.178,False,1
+5768468,2016-06-06,3,0,48,RESISTÊNCIA,0,0,sms_voz,0.2021,bajo,sms,Recordatorio automático,0.178,False,1
+5745008,2016-06-07,8,1,51,ANDORINHAS,0,0,whatsapp,0.1979,bajo,whatsapp,Recordatorio automático,0.178,False,0
+5759806,2016-06-02,1,3,1,JABOUR,0,0,whatsapp,0.197,bajo,whatsapp,Recordatorio automático,0.089,False,0
+5774756,2016-06-08,2,2,47,PRAIA DO CANTO,0,1,ninguno,0.1953,bajo,ninguno,Entregar fecha y hora por escrito al agendar,0.0,False,0
+5738270,2016-06-01,7,2,76,ILHA DAS CAIEIRAS,1,0,sms_voz,0.1842,bajo,sms,Recordatorio automático,0.178,False,0
+5535723,2016-06-02,62,3,66,JARDIM CAMBURI,0,0,ninguno,0.1834,bajo,ninguno,Entregar fecha y hora por escrito al agendar,0.0,False,0
+5689481,2016-06-02,21,3,72,JABOUR,0,0,whatsapp,0.1753,bajo,whatsapp,Recordatorio automático,0.178,False,0
+5760448,2016-06-02,1,3,58,ILHA DAS CAIEIRAS,1,0,whatsapp,0.1739,bajo,whatsapp,Recordatorio automático,0.089,False,0
+5735657,2016-06-03,9,4,71,SÃO BENEDITO,0,0,whatsapp,0.1708,bajo,whatsapp,Recordatorio automático,0.178,False,0
+5749074,2016-06-02,2,3,70,CENTRO,0,0,whatsapp,0.1659,bajo,whatsapp,Recordatorio automático,0.089,False,0
+5781265,2016-06-08,1,2,67,ROMÃO,0,1,whatsapp,0.1578,bajo,whatsapp,Recordatorio automático,0.089,False,0
+5759158,2016-06-02,1,3,50,TABUAZEIRO,0,0,whatsapp,0.1573,bajo,whatsapp,Recordatorio automático,0.089,False,0
+5753447,2016-06-01,1,2,68,JARDIM CAMBURI,0,1,sms_voz,0.1571,bajo,sms,Recordatorio automático,0.089,False,0
+5778541,2016-06-08,2,2,54,MATA DA PRAIA,0,0,ninguno,0.1526,bajo,ninguno,Entregar fecha y hora por escrito al agendar,0.0,False,0
+5756056,2016-06-03,2,4,80,JARDIM CAMBURI,0,0,whatsapp,0.1525,bajo,whatsapp,Recordatorio automático,0.089,False,0
+5773477,2016-06-08,2,2,80,SANTO ANTÔNIO,0,0,whatsapp,0.1519,bajo,whatsapp,Recordatorio automático,0.089,False,0
+5779113,2016-06-08,2,2,59,NOVA PALESTINA,0,0,ninguno,0.1498,bajo,ninguno,Entregar fecha y hora por escrito al agendar,0.0,False,0
+5741964,2016-06-01,2,2,64,BONFIM,0,0,sms_voz,0.1449,bajo,sms,Recordatorio automático,0.089,False,1
+5741724,2016-06-02,3,3,67,JABOUR,0,0,whatsapp,0.1433,bajo,whatsapp,Recordatorio automático,0.178,False,0
+5766427,2016-06-03,1,4,72,SÃO BENEDITO,0,0,whatsapp,0.142,bajo,whatsapp,Recordatorio automático,0.089,False,0
+5749672,2016-06-02,2,3,64,PRAIA DO SUÁ,0,0,sms_voz,0.1402,bajo,sms,Recordatorio automático,0.089,False,1
+5752711,2016-06-02,2,3,67,TABUAZEIRO,0,0,ninguno,0.1355,bajo,ninguno,Entregar fecha y hora por escrito al agendar,0.0,False,0

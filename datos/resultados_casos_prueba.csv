@@ -1,0 +1,101 @@
+id_cita,grupo,dias_anticipacion,hora_cita,servicio,zona,edad,subsidio,hipertension,diabetes,faltas_previas,canal_disponible,probabilidad,nivel,canal_accion,accion,momento,costo,probabilidad_con_intervencion
+PRUEBA-001,Mismo día,0,14:30,DERMATOLOGIA,ALTO SELVA ALEGRE,25,0,0,0,3,whatsapp,0.1252,bajo,ninguno,Cita del mismo día: no requiere recordatorio,—,0.0,0.1252
+PRUEBA-002,Mismo día,0,15:45,NEUMOLOGIA,CHARACATO,25,0,0,0,2,ninguno,0.0959,bajo,ninguno,Cita del mismo día: no requiere recordatorio,—,0.0,0.0959
+PRUEBA-003,Mismo día,0,08:00,NEUROLOGIA,MIRAFLORES,39,1,0,0,0,whatsapp,0.0312,bajo,ninguno,Cita del mismo día: no requiere recordatorio,—,0.0,0.0312
+PRUEBA-004,Mismo día,0,18:00,NEUROLOGIA,ALTO SELVA ALEGRE,2,1,0,0,0,whatsapp,0.0243,bajo,ninguno,Cita del mismo día: no requiere recordatorio,—,0.0,0.0243
+PRUEBA-005,Mismo día,0,18:00,GERIATRIA,SACHACA,35,1,0,0,2,sms_voz,0.0468,bajo,ninguno,Cita del mismo día: no requiere recordatorio,—,0.0,0.0468
+PRUEBA-006,Mismo día,0,07:30,REUMATOLOGIA,MIRAFLORES,56,1,0,0,2,sms_voz,0.0339,bajo,ninguno,Cita del mismo día: no requiere recordatorio,—,0.0,0.0339
+PRUEBA-007,Mismo día,0,14:30,NEUROLOGIA,PAUCARPATA,46,1,0,0,3,whatsapp,0.0606,bajo,ninguno,Cita del mismo día: no requiere recordatorio,—,0.0,0.0606
+PRUEBA-008,Mismo día,0,07:30,DERMATOLOGIA,HUNTER,33,1,0,0,2,whatsapp,0.0468,bajo,ninguno,Cita del mismo día: no requiere recordatorio,—,0.0,0.0468
+PRUEBA-009,Mismo día,0,15:45,NEUMOLOGIA,YANAHUARA,18,0,0,0,0,whatsapp,0.049,bajo,ninguno,Cita del mismo día: no requiere recordatorio,—,0.0,0.049
+PRUEBA-010,Mismo día,0,15:45,REUMATOLOGIA,MIRAFLORES,58,1,0,0,1,whatsapp,0.0341,bajo,ninguno,Cita del mismo día: no requiere recordatorio,—,0.0,0.0341
+PRUEBA-011,1 a 2 días,2,18:00,CARDIOLOGIA,MIRAFLORES,57,1,0,0,0,whatsapp,0.2028,bajo,whatsapp,Recordatorio automático,24 h antes,0.089,0.1813
+PRUEBA-012,1 a 2 días,2,18:00,GERIATRIA,YANAHUARA,11,1,0,0,2,whatsapp,0.3206,medio,whatsapp,Recordatorio automático,24 h antes,0.089,0.2866
+PRUEBA-013,1 a 2 días,2,15:45,MEDICINA FISICA,SOCABAYA,10,1,0,0,0,ninguno,0.2563,medio,ninguno,Actualizar contacto; avisar por el centro de salud de referencia,Al agendar,0.0,0.2563
+PRUEBA-014,1 a 2 días,2,11:45,DERMATOLOGIA,PAUCARPATA,50,1,0,0,2,whatsapp,0.2842,medio,whatsapp,Recordatorio automático,24 h antes,0.089,0.2541
+PRUEBA-015,1 a 2 días,2,10:30,MEDICINA FISICA,AREQUIPA,69,1,0,1,1,sms_voz,0.1821,bajo,sms,Recordatorio automático,24 h antes,0.089,0.1628
+PRUEBA-016,1 a 2 días,1,18:00,OFTALMOLOGIA,YANAHUARA,5,0,0,0,2,whatsapp,0.2608,medio,whatsapp,Recordatorio automático,24 h antes,0.089,0.2332
+PRUEBA-017,1 a 2 días,1,14:30,DERMATOLOGIA,MIRAFLORES,32,1,0,0,0,whatsapp,0.2377,medio,whatsapp,Recordatorio automático,24 h antes,0.089,0.2125
+PRUEBA-018,1 a 2 días,1,07:30,NEFROLOGIA,MARIANO MELGAR,25,0,0,0,2,whatsapp,0.315,medio,whatsapp,Recordatorio automático,24 h antes,0.089,0.2816
+PRUEBA-019,1 a 2 días,1,11:45,NEUROLOGIA,PAUCARPATA,52,1,0,0,0,whatsapp,0.1941,bajo,whatsapp,Recordatorio automático,24 h antes,0.089,0.1735
+PRUEBA-020,1 a 2 días,2,07:30,REUMATOLOGIA,CHARACATO,19,1,0,0,0,whatsapp,0.2885,medio,whatsapp,Recordatorio automático,24 h antes,0.089,0.2579
+PRUEBA-021,1 a 2 días,2,11:45,ENDOCRINOLOGIA,CERRO COLORADO,5,0,0,0,5,whatsapp,0.4015,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",Al agendar o el día previo,2.489,0.2449
+PRUEBA-022,1 a 2 días,1,07:30,GERIATRIA,AREQUIPA,29,1,0,0,5,whatsapp,0.4328,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo",Al agendar o el día previo,2.489,0.264
+PRUEBA-023,1 a 2 días,1,13:00,OFTALMOLOGIA,HUNTER,22,0,0,0,1,whatsapp,0.2737,medio,whatsapp,Recordatorio automático,24 h antes,0.089,0.2447
+PRUEBA-024,1 a 2 días,2,11:45,ENDOCRINOLOGIA,HUNTER,2,0,0,0,3,sms_voz,0.2867,medio,sms,Recordatorio automático,24 h antes,0.089,0.2563
+PRUEBA-025,1 a 2 días,1,07:30,MEDICINA FISICA,MARIANO MELGAR,58,1,0,0,5,whatsapp,0.3143,medio,whatsapp,Recordatorio automático,24 h antes,0.089,0.281
+PRUEBA-026,3 a 14 días,3,11:45,MEDICINA FISICA,CHARACATO,18,1,0,0,0,whatsapp,0.2934,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.2623
+PRUEBA-027,3 a 14 días,12,15:45,DERMATOLOGIA,CAYMA,32,0,0,0,1,whatsapp,0.3537,alto,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.2946
+PRUEBA-028,3 a 14 días,6,09:15,ENDOCRINOLOGIA,SOCABAYA,66,1,1,0,0,ninguno,0.1799,bajo,ninguno,Entregar fecha y hora por escrito al agendar,Al agendar,0.0,0.1799
+PRUEBA-029,3 a 14 días,14,11:45,NEFROLOGIA,JOSE LUIS BUSTAMANTE Y RIVERO,29,1,0,0,5,whatsapp,0.6112,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo","72 a 48 h antes; si no confirma a las 24 h, liberar cupo",2.489,0.3728
+PRUEBA-030,3 a 14 días,4,08:00,NEUMOLOGIA,SOCABAYA,54,1,0,0,5,whatsapp,0.4651,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo","72 a 48 h antes; si no confirma a las 24 h, liberar cupo",2.489,0.2837
+PRUEBA-031,3 a 14 días,9,09:15,PEDIATRIA,SACHACA,53,1,0,0,2,whatsapp,0.3547,alto,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.2955
+PRUEBA-032,3 a 14 días,9,10:30,NEUROLOGIA,AREQUIPA,90,1,1,0,1,sms_voz,0.207,bajo,sms,Recordatorio automático,48 h y 24 h antes,0.178,0.1724
+PRUEBA-033,3 a 14 días,4,14:30,PEDIATRIA,CHARACATO,9,1,0,0,0,ninguno,0.2561,medio,ninguno,Actualizar contacto; avisar por el centro de salud de referencia,Al agendar,0.0,0.2561
+PRUEBA-034,3 a 14 días,13,09:15,NEFROLOGIA,CAYMA,37,1,0,0,3,ninguno,0.454,alto,visita,Visita domiciliaria o agente comunitario; confirmar o reprogramar,5 a 3 días antes,25.0,0.2769
+PRUEBA-035,3 a 14 días,9,13:00,CARDIOLOGIA,CERRO COLORADO,13,0,0,0,1,sms_voz,0.3321,alto,sms,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.2766
+PRUEBA-036,3 a 14 días,4,14:30,OFTALMOLOGIA,CERRO COLORADO,49,1,0,0,0,whatsapp,0.2341,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.2093
+PRUEBA-037,3 a 14 días,4,17:00,PEDIATRIA,YURA,24,0,0,0,0,sms_voz,0.2688,medio,sms,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.2403
+PRUEBA-038,3 a 14 días,6,09:15,NEUROLOGIA,CAYMA,46,1,0,1,3,whatsapp,0.387,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo","72 a 48 h antes; si no confirma a las 24 h, liberar cupo",2.489,0.2361
+PRUEBA-039,3 a 14 días,9,10:30,CARDIOLOGIA,CHARACATO,67,1,1,0,0,sms_voz,0.177,bajo,sms,Recordatorio automático,48 h y 24 h antes,0.178,0.1474
+PRUEBA-040,3 a 14 días,7,17:00,OFTALMOLOGIA,YURA,41,0,0,0,1,whatsapp,0.2823,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.2524
+PRUEBA-041,3 a 14 días,7,07:30,GASTROENTEROLOGIA,ALTO SELVA ALEGRE,25,0,0,0,0,whatsapp,0.2717,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.2429
+PRUEBA-042,3 a 14 días,7,15:45,ENDOCRINOLOGIA,YANAHUARA,57,0,0,0,5,whatsapp,0.4155,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo","72 a 48 h antes; si no confirma a las 24 h, liberar cupo",2.489,0.2535
+PRUEBA-043,3 a 14 días,7,11:45,DERMATOLOGIA,YURA,54,1,0,0,5,whatsapp,0.461,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo","72 a 48 h antes; si no confirma a las 24 h, liberar cupo",2.489,0.2812
+PRUEBA-044,3 a 14 días,4,09:15,DERMATOLOGIA,SACHACA,88,1,1,0,1,whatsapp,0.1773,bajo,whatsapp,Recordatorio automático,48 h y 24 h antes,0.178,0.1585
+PRUEBA-045,3 a 14 días,4,11:45,CARDIOLOGIA,YANAHUARA,84,1,1,0,0,whatsapp,0.1685,bajo,whatsapp,Recordatorio automático,48 h y 24 h antes,0.178,0.1506
+PRUEBA-046,3 a 14 días,6,17:00,REUMATOLOGIA,SACHACA,30,1,0,0,5,whatsapp,0.5104,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo","72 a 48 h antes; si no confirma a las 24 h, liberar cupo",2.489,0.3113
+PRUEBA-047,3 a 14 días,4,10:30,NEUROLOGIA,MIRAFLORES,73,0,0,0,5,whatsapp,0.3698,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo","72 a 48 h antes; si no confirma a las 24 h, liberar cupo",2.489,0.2256
+PRUEBA-048,3 a 14 días,13,08:00,ENDOCRINOLOGIA,AREQUIPA,27,1,0,0,1,whatsapp,0.4271,alto,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.3558
+PRUEBA-049,3 a 14 días,8,18:00,MEDICINA FISICA,SOCABAYA,19,1,0,0,2,whatsapp,0.4411,alto,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.3674
+PRUEBA-050,3 a 14 días,3,10:30,NEUROLOGIA,HUNTER,19,0,0,0,0,whatsapp,0.2686,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.2401
+PRUEBA-051,15 a 60 días,42,10:30,CARDIOLOGIA,CHARACATO,43,1,0,0,0,whatsapp,0.3828,alto,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.3082
+PRUEBA-052,15 a 60 días,54,10:30,NEUROLOGIA,CHARACATO,6,1,0,0,5,whatsapp,0.6318,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo","72 a 48 h antes; si no confirma a las 24 h, liberar cupo",2.489,0.3854
+PRUEBA-053,15 a 60 días,16,07:30,GERIATRIA,ALTO SELVA ALEGRE,72,1,0,0,0,sms_voz,0.2109,medio,sms,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.1704
+PRUEBA-054,15 a 60 días,48,07:30,ENDOCRINOLOGIA,CHARACATO,54,1,0,1,5,whatsapp,0.6296,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo","72 a 48 h antes; si no confirma a las 24 h, liberar cupo",2.489,0.3841
+PRUEBA-055,15 a 60 días,57,15:45,NEUMOLOGIA,AREQUIPA,1,1,0,0,0,whatsapp,0.3158,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.2542
+PRUEBA-056,15 a 60 días,19,15:45,GASTROENTEROLOGIA,MIRAFLORES,35,0,0,0,0,sms_voz,0.3081,medio,sms,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.2489
+PRUEBA-057,15 a 60 días,43,07:30,ENDOCRINOLOGIA,CHARACATO,26,1,0,0,0,ninguno,0.3937,alto,ninguno,Sin contacto posible: marcar cupo para lista de espera si no confirma en ventanilla,Al agendar,0.0,0.3937
+PRUEBA-058,15 a 60 días,42,17:00,PEDIATRIA,CERRO COLORADO,64,1,0,0,3,sms_voz,0.4353,alto,sms,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.3504
+PRUEBA-059,15 a 60 días,21,07:30,REUMATOLOGIA,PAUCARPATA,27,1,0,0,0,whatsapp,0.3756,alto,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.3035
+PRUEBA-060,15 a 60 días,50,08:00,OFTALMOLOGIA,YURA,66,1,0,0,5,whatsapp,0.5862,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo","72 a 48 h antes; si no confirma a las 24 h, liberar cupo",2.489,0.3576
+PRUEBA-061,15 a 60 días,23,18:00,CARDIOLOGIA,MAJES,34,1,0,0,2,whatsapp,0.4863,alto,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.3929
+PRUEBA-062,15 a 60 días,24,18:00,OFTALMOLOGIA,HUNTER,18,0,0,0,3,whatsapp,0.5216,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo","72 a 48 h antes; si no confirma a las 24 h, liberar cupo",2.489,0.3182
+PRUEBA-063,15 a 60 días,31,17:00,NEUMOLOGIA,SACHACA,10,0,0,0,5,whatsapp,0.5763,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo","72 a 48 h antes; si no confirma a las 24 h, liberar cupo",2.489,0.3515
+PRUEBA-064,15 a 60 días,19,13:00,NEUMOLOGIA,CAYMA,30,1,0,0,3,whatsapp,0.4987,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo","72 a 48 h antes; si no confirma a las 24 h, liberar cupo",2.489,0.3042
+PRUEBA-065,15 a 60 días,60,18:00,NEFROLOGIA,HUNTER,38,1,0,0,5,whatsapp,0.6773,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo","72 a 48 h antes; si no confirma a las 24 h, liberar cupo",2.489,0.4132
+PRUEBA-066,15 a 60 días,44,07:30,NEUMOLOGIA,SOCABAYA,63,1,0,0,0,ninguno,0.2468,medio,ninguno,Actualizar contacto; avisar por el centro de salud de referencia,Al agendar,0.0,0.2468
+PRUEBA-067,15 a 60 días,58,08:00,OFTALMOLOGIA,HUNTER,80,0,1,0,3,ninguno,0.3964,alto,visita,Visita domiciliaria o agente comunitario; confirmar o reprogramar,5 a 3 días antes,25.0,0.2418
+PRUEBA-068,15 a 60 días,30,08:00,NEFROLOGIA,SACHACA,19,0,0,0,0,whatsapp,0.3447,alto,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.2785
+PRUEBA-069,15 a 60 días,23,17:00,GASTROENTEROLOGIA,AREQUIPA,40,1,0,0,5,whatsapp,0.6239,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo","72 a 48 h antes; si no confirma a las 24 h, liberar cupo",2.489,0.3806
+PRUEBA-070,15 a 60 días,31,17:00,NEFROLOGIA,YANAHUARA,79,0,1,0,1,sms_voz,0.3201,medio,sms,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.2577
+PRUEBA-071,15 a 60 días,34,14:30,PEDIATRIA,AREQUIPA,48,0,0,0,0,ninguno,0.2849,medio,ninguno,Actualizar contacto; avisar por el centro de salud de referencia,Al agendar,0.0,0.2849
+PRUEBA-072,15 a 60 días,39,09:15,MEDICINA FISICA,YANAHUARA,50,1,0,0,0,whatsapp,0.3039,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.2446
+PRUEBA-073,15 a 60 días,16,11:45,MEDICINA FISICA,AREQUIPA,5,1,0,0,2,whatsapp,0.4692,alto,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.3791
+PRUEBA-074,15 a 60 días,57,10:30,NEUROLOGIA,MAJES,26,1,0,0,0,whatsapp,0.3937,alto,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.3169
+PRUEBA-075,15 a 60 días,50,07:30,GERIATRIA,SACHACA,23,0,0,0,1,ninguno,0.4319,alto,visita,Visita domiciliaria o agente comunitario; confirmar o reprogramar,5 a 3 días antes,25.0,0.2635
+PRUEBA-076,"Más de 60 días (espera larga, como en EsSalud)",99,07:30,REUMATOLOGIA,MARIANO MELGAR,73,1,0,1,2,sms_voz,0.4553,alto,sms,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.3665
+PRUEBA-077,"Más de 60 días (espera larga, como en EsSalud)",122,11:45,DERMATOLOGIA,HUNTER,71,1,1,0,2,sms_voz,0.4188,alto,sms,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.3371
+PRUEBA-078,"Más de 60 días (espera larga, como en EsSalud)",94,08:00,PEDIATRIA,MIRAFLORES,49,0,0,0,3,whatsapp,0.4715,alto,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.3796
+PRUEBA-079,"Más de 60 días (espera larga, como en EsSalud)",113,18:00,OFTALMOLOGIA,CAYMA,63,0,0,0,1,sms_voz,0.2921,medio,sms,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.2351
+PRUEBA-080,"Más de 60 días (espera larga, como en EsSalud)",129,13:00,CARDIOLOGIA,MARIANO MELGAR,19,0,0,0,2,whatsapp,0.504,alto,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.4057
+PRUEBA-081,"Más de 60 días (espera larga, como en EsSalud)",132,18:00,GERIATRIA,YANAHUARA,12,1,0,0,1,sms_voz,0.4499,alto,sms,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.3622
+PRUEBA-082,"Más de 60 días (espera larga, como en EsSalud)",62,08:00,PEDIATRIA,CHARACATO,67,1,0,0,1,ninguno,0.3811,alto,visita,Visita domiciliaria o agente comunitario; confirmar o reprogramar,5 a 3 días antes,25.0,0.2325
+PRUEBA-083,"Más de 60 días (espera larga, como en EsSalud)",63,18:00,NEUMOLOGIA,MIRAFLORES,58,0,0,0,0,ninguno,0.2232,medio,ninguno,Actualizar contacto; avisar por el centro de salud de referencia,Al agendar,0.0,0.2232
+PRUEBA-084,"Más de 60 días (espera larga, como en EsSalud)",102,14:30,PEDIATRIA,ALTO SELVA ALEGRE,25,1,0,0,0,whatsapp,0.3896,alto,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.3136
+PRUEBA-085,"Más de 60 días (espera larga, como en EsSalud)",105,13:00,DERMATOLOGIA,SACHACA,85,0,1,0,0,sms_voz,0.1903,bajo,sms,Recordatorio automático,48 h y 24 h antes,0.178,0.1532
+PRUEBA-086,"Más de 60 días (espera larga, como en EsSalud)",118,09:15,NEFROLOGIA,SACHACA,20,0,0,0,3,whatsapp,0.4851,alto,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.3905
+PRUEBA-087,"Más de 60 días (espera larga, como en EsSalud)",126,07:30,OFTALMOLOGIA,CHARACATO,90,1,1,0,5,whatsapp,0.5516,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo","72 a 48 h antes; si no confirma a las 24 h, liberar cupo",2.489,0.3365
+PRUEBA-088,"Más de 60 días (espera larga, como en EsSalud)",121,18:00,NEUROLOGIA,MAJES,47,0,0,1,0,whatsapp,0.247,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.1988
+PRUEBA-089,"Más de 60 días (espera larga, como en EsSalud)",131,07:30,GASTROENTEROLOGIA,HUNTER,38,1,0,0,0,whatsapp,0.3638,alto,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.2929
+PRUEBA-090,"Más de 60 días (espera larga, como en EsSalud)",85,11:45,CARDIOLOGIA,HUNTER,91,1,0,0,2,sms_voz,0.4743,alto,sms,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.3818
+PRUEBA-091,"Más de 60 días (espera larga, como en EsSalud)",61,09:15,PEDIATRIA,MAJES,6,0,0,0,2,whatsapp,0.4649,alto,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.3742
+PRUEBA-092,"Más de 60 días (espera larga, como en EsSalud)",74,13:00,MEDICINA FISICA,JOSE LUIS BUSTAMANTE Y RIVERO,24,0,0,0,1,whatsapp,0.4357,alto,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.3507
+PRUEBA-093,"Más de 60 días (espera larga, como en EsSalud)",107,08:00,GASTROENTEROLOGIA,SACHACA,69,1,1,1,3,sms_voz,0.4383,alto,sms,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.3528
+PRUEBA-094,"Más de 60 días (espera larga, como en EsSalud)",72,08:00,NEUMOLOGIA,CHARACATO,86,1,0,0,1,sms_voz,0.405,alto,sms,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.326
+PRUEBA-095,"Más de 60 días (espera larga, como en EsSalud)",145,18:00,PEDIATRIA,MARIANO MELGAR,2,1,0,0,2,whatsapp,0.4093,alto,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.3295
+PRUEBA-096,"Más de 60 días (espera larga, como en EsSalud)",149,11:45,NEFROLOGIA,SACHACA,26,1,0,0,5,whatsapp,0.6592,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo","72 a 48 h antes; si no confirma a las 24 h, liberar cupo",2.489,0.4021
+PRUEBA-097,"Más de 60 días (espera larga, como en EsSalud)",137,15:45,DERMATOLOGIA,PAUCARPATA,47,0,0,1,0,whatsapp,0.247,medio,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.1988
+PRUEBA-098,"Más de 60 días (espera larga, como en EsSalud)",111,15:45,REUMATOLOGIA,MAJES,39,1,0,0,3,whatsapp,0.5024,alto,whatsapp,"Recordatorio con pedido de confirmación; si no responde, llamada",72 h (confirmar) y 24 h antes,0.178,0.4044
+PRUEBA-099,"Más de 60 días (espera larga, como en EsSalud)",83,14:30,DERMATOLOGIA,YANAHUARA,50,1,0,0,3,whatsapp,0.5068,alto,llamada,"Llamada telefónica: confirmar, reprogramar o liberar el cupo","72 a 48 h antes; si no confirma a las 24 h, liberar cupo",2.489,0.3091
+PRUEBA-100,"Más de 60 días (espera larga, como en EsSalud)",142,10:30,MEDICINA FISICA,MIRAFLORES,83,0,1,1,3,ninguno,0.3755,alto,visita,Visita domiciliaria o agente comunitario; confirmar o reprogramar,5 a 3 días antes,25.0,0.2291

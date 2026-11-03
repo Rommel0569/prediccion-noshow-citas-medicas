@@ -1,0 +1,110 @@
+{
+  "pruebas": [
+    {
+      "prueba": "Las 100 citas reciben probabilidad entre 0 y 1",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Citas del mismo día: sin recordatorio y costo 0",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Solo se llama a quien tiene celular y cita futura",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Las llamadas no superan la capacidad (20 % de la agenda)",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Sin celular nunca recibe SMS ni WhatsApp",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Visita solo para riesgo alto, sin celular y crónico o reincidente",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "La intervención nunca sube el riesgo",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Más inasistencias previas → más riesgo",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Distrito no visto en el entrenamiento se procesa (tasa global)",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "La hora y la especialidad no cambian el riesgo del modelo base (no las tiene)",
+      "resultado": "OK"
+    },
+    {
+      "prueba": "Tiempo de un caso individual menor a 3 s (RNF-04)",
+      "resultado": "OK"
+    }
+  ],
+  "por_grupo": [
+    {
+      "grupo": "Mismo día",
+      "casos": 10,
+      "riesgo_promedio": 0.055,
+      "llamadas": 0,
+      "mensajes": 0,
+      "visitas": 0,
+      "sin_accion": 10,
+      "costo": 0.0
+    },
+    {
+      "grupo": "1 a 2 días",
+      "casos": 15,
+      "riesgo_promedio": 0.283,
+      "llamadas": 2,
+      "mensajes": 12,
+      "visitas": 0,
+      "sin_accion": 1,
+      "costo": 6.046
+    },
+    {
+      "grupo": "3 a 14 días",
+      "casos": 25,
+      "riesgo_promedio": 0.335,
+      "llamadas": 7,
+      "mensajes": 15,
+      "visitas": 1,
+      "sin_accion": 2,
+      "costo": 45.093
+    },
+    {
+      "grupo": "15 a 60 días",
+      "casos": 25,
+      "riesgo_promedio": 0.434,
+      "llamadas": 8,
+      "mensajes": 12,
+      "visitas": 2,
+      "sin_accion": 3,
+      "costo": 72.048
+    },
+    {
+      "grupo": "Más de 60 días (espera larga, como en EsSalud)",
+      "casos": 25,
+      "riesgo_promedio": 0.414,
+      "llamadas": 3,
+      "mensajes": 19,
+      "visitas": 2,
+      "sin_accion": 1,
+      "costo": 60.849
+    }
+  ],
+  "segundos_100_casos": 1.61,
+  "milisegundos_un_caso": 5.8,
+  "resumen": {
+    "llamadas": 20,
+    "mensajes": 58,
+    "visitas": 5,
+    "costo_total": 184.04,
+    "riesgo_promedio": 0.3435,
+    "riesgo_con_intervencion": 0.262
+  }
+}

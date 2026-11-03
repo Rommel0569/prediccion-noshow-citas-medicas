@@ -1,0 +1,61 @@
+# PLANTILLA para aplicar el sistema en otro establecimiento (ej. hospital de Arequipa, Chile, Colombia).
+# Pasos: 1) exporte el historial de citas a CSV; 2) escriba aquí el nombre de cada columna;
+# 3) ejecute:  python entrenar.py --config config/mi_hospital.yaml
+# Las columnas marcadas "opcional" pueden dejarse vacías (null).
+
+nombre: "Hospital X - historial de citas"
+archivo_datos: "../datos/mi_hospital_citas.csv"   # ruta relativa a esta carpeta config/
+
+columnas:
+  id_paciente: NRO_HISTORIA        # documento o número de historia (anonimizado)
+  id_cita: ID_CITA
+  sexo: SEXO
+  fecha_registro: FECHA_REGISTRO   # día en que se otorgó la cita
+  fecha_cita: FECHA_CITA           # día de la consulta
+  edad: EDAD
+  zona: DISTRITO_PACIENTE          # distrito, comuna o localidad de residencia
+  subsidio: SEGURO_SUBSIDIADO      # 1 = SIS / FONASA A-B / régimen subsidiado
+  hipertension: HTA                # opcional: derivado de CIE-10 I10-I15
+  diabetes: DM                     # opcional: derivado de CIE-10 E10-E14
+  recordatorio: null               # opcional
+  canal_disponible: CANAL          # opcional: whatsapp / sms_voz / ninguno
+  servicio: ESPECIALIDAD           # recomendada: entra al modelo al reentrenar y permite reasignar cupos por especialidad
+  turno: TURNO                     # recomendada: MAÑANA/TARDE o la hora de la cita; entra al modelo al reentrenar
+  falto: ESTADO_CITA
+
+valores:
+  falto_si: ["NO ATENDIDA", "DESERCION", "AUSENTE"]
+  sexo_femenino: ["F", "FEMENINO", "Femenino"]
+  verdadero: [1, "1", "SI", "Sí", "Si", "S", "True", "true"]
+  turno_tarde: ["TARDE", "T", "PM"]   # textos que indican turno tarde (si viene la hora, se usa ≥ 13:00)
+
+entrenamiento:
+  proporcion_validacion: 0.2
+  proporcion_prueba: 0.2
+  suavizado_zona: 50
+  semilla: 42
+
+niveles:
+  alto_percentil: 0.20             # ajustar a la capacidad real de llamadas del establecimiento
+  medio_percentil: 0.30
+
+costos:
+  whatsapp: 0.089
+  sms: 0.089
+  llamada: 2.40
+  visita: 25.00
+  valor_consulta: 30.00             # supuesto: costo de una consulta perdida; reemplazar por el costo real local
+
+efecto_canal:
+  whatsapp: 0.29
+  sms: 0.29
+  llamada: 0.39
+  visita: 0.39
+  ninguno: 0.0
+
+canales_simulados:
+  general:     {whatsapp: 0.802, sms_voz: 0.107, ninguno: 0.091}
+  adulto_mayor: {whatsapp: 0.483, sms_voz: 0.365, ninguno: 0.152}
+
+reasignacion:
+  horas_limite_confirmacion: 24

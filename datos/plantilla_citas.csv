@@ -1,0 +1,4 @@
+id_cita,id_paciente,sexo,fecha_registro,fecha_cita,edad,zona,subsidio,hipertension,diabetes,canal_disponible,servicio,turno,recordatorio,falto
+EJEMPLO-001,PAC-0001,F,2026-09-01,2026-10-20,34,CERRO COLORADO,1,0,0,whatsapp,MEDICINA INTERNA,MAÑANA,1,0
+EJEMPLO-002,PAC-0002,M,2026-09-15,2026-10-20,67,PAUCARPATA,1,1,1,sms_voz,CARDIOLOGIA,TARDE,1,1
+EJEMPLO-003,PAC-0003,F,2026-10-18,2026-10-20,22,YURA,0,0,0,ninguno,GINECOLOGIA,MAÑANA,0,0

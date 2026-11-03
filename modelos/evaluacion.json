@@ -1,0 +1,423 @@
+{
+  "curva_costo": [
+    {
+      "frac_llamadas": 0.0,
+      "eleccion": "modelo",
+      "evitadas": 633.9,
+      "costo": 2757.93
+    },
+    {
+      "frac_llamadas": 0.0,
+      "eleccion": "azar",
+      "evitadas": 633.9,
+      "costo": 2757.93
+    },
+    {
+      "frac_llamadas": 0.05,
+      "eleccion": "modelo",
+      "evitadas": 707.8,
+      "costo": 4548.96
+    },
+    {
+      "frac_llamadas": 0.05,
+      "eleccion": "azar",
+      "evitadas": 674.7,
+      "costo": 4548.96
+    },
+    {
+      "frac_llamadas": 0.1,
+      "eleccion": "modelo",
+      "evitadas": 767.6,
+      "costo": 6337.67
+    },
+    {
+      "frac_llamadas": 0.1,
+      "eleccion": "azar",
+      "evitadas": 724.5,
+      "costo": 6337.67
+    },
+    {
+      "frac_llamadas": 0.15,
+      "eleccion": "modelo",
+      "evitadas": 829.3,
+      "costo": 8128.7
+    },
+    {
+      "frac_llamadas": 0.15,
+      "eleccion": "azar",
+      "evitadas": 773.0,
+      "costo": 8128.7
+    },
+    {
+      "frac_llamadas": 0.2,
+      "eleccion": "modelo",
+      "evitadas": 883.9,
+      "costo": 9919.72
+    },
+    {
+      "frac_llamadas": 0.2,
+      "eleccion": "azar",
+      "evitadas": 821.0,
+      "costo": 9919.72
+    },
+    {
+      "frac_llamadas": 0.25,
+      "eleccion": "modelo",
+      "evitadas": 941.9,
+      "costo": 11710.75
+    },
+    {
+      "frac_llamadas": 0.25,
+      "eleccion": "azar",
+      "evitadas": 864.2,
+      "costo": 11710.75
+    },
+    {
+      "frac_llamadas": 0.3,
+      "eleccion": "modelo",
+      "evitadas": 993.0,
+      "costo": 13499.46
+    },
+    {
+      "frac_llamadas": 0.3,
+      "eleccion": "azar",
+      "evitadas": 913.5,
+      "costo": 13499.46
+    },
+    {
+      "frac_llamadas": 0.35,
+      "eleccion": "modelo",
+      "evitadas": 1047.7,
+      "costo": 15290.49
+    },
+    {
+      "frac_llamadas": 0.35,
+      "eleccion": "azar",
+      "evitadas": 963.6,
+      "costo": 15290.49
+    },
+    {
+      "frac_llamadas": 0.4,
+      "eleccion": "modelo",
+      "evitadas": 1094.9,
+      "costo": 17081.51
+    },
+    {
+      "frac_llamadas": 0.4,
+      "eleccion": "azar",
+      "evitadas": 1004.7,
+      "costo": 17081.51
+    },
+    {
+      "frac_llamadas": 0.45,
+      "eleccion": "modelo",
+      "evitadas": 1145.0,
+      "costo": 18870.22
+    },
+    {
+      "frac_llamadas": 0.45,
+      "eleccion": "azar",
+      "evitadas": 1044.9,
+      "costo": 18870.22
+    },
+    {
+      "frac_llamadas": 0.5,
+      "eleccion": "modelo",
+      "evitadas": 1191.0,
+      "costo": 20661.25
+    },
+    {
+      "frac_llamadas": 0.5,
+      "eleccion": "azar",
+      "evitadas": 1091.3,
+      "costo": 20661.25
+    },
+    {
+      "frac_llamadas": 0.55,
+      "eleccion": "modelo",
+      "evitadas": 1234.9,
+      "costo": 22452.27
+    },
+    {
+      "frac_llamadas": 0.55,
+      "eleccion": "azar",
+      "evitadas": 1138.7,
+      "costo": 22452.27
+    },
+    {
+      "frac_llamadas": 0.6,
+      "eleccion": "modelo",
+      "evitadas": 1276.6,
+      "costo": 24240.99
+    },
+    {
+      "frac_llamadas": 0.6,
+      "eleccion": "azar",
+      "evitadas": 1186.2,
+      "costo": 24240.99
+    },
+    {
+      "frac_llamadas": 0.65,
+      "eleccion": "modelo",
+      "evitadas": 1320.7,
+      "costo": 26032.01
+    },
+    {
+      "frac_llamadas": 0.65,
+      "eleccion": "azar",
+      "evitadas": 1236.9,
+      "costo": 26032.01
+    },
+    {
+      "frac_llamadas": 0.7,
+      "eleccion": "modelo",
+      "evitadas": 1360.8,
+      "costo": 27823.04
+    },
+    {
+      "frac_llamadas": 0.7,
+      "eleccion": "azar",
+      "evitadas": 1281.3,
+      "costo": 27823.04
+    },
+    {
+      "frac_llamadas": 0.75,
+      "eleccion": "modelo",
+      "evitadas": 1402.5,
+      "costo": 29611.75
+    },
+    {
+      "frac_llamadas": 0.75,
+      "eleccion": "azar",
+      "evitadas": 1328.5,
+      "costo": 29611.75
+    },
+    {
+      "frac_llamadas": 0.8,
+      "eleccion": "modelo",
+      "evitadas": 1439.3,
+      "costo": 31402.78
+    },
+    {
+      "frac_llamadas": 0.8,
+      "eleccion": "azar",
+      "evitadas": 1380.0,
+      "costo": 31402.78
+    },
+    {
+      "frac_llamadas": 0.85,
+      "eleccion": "modelo",
+      "evitadas": 1478.9,
+      "costo": 33193.8
+    },
+    {
+      "frac_llamadas": 0.85,
+      "eleccion": "azar",
+      "evitadas": 1429.6,
+      "costo": 33193.8
+    },
+    {
+      "frac_llamadas": 0.9,
+      "eleccion": "modelo",
+      "evitadas": 1515.5,
+      "costo": 34984.83
+    },
+    {
+      "frac_llamadas": 0.9,
+      "eleccion": "azar",
+      "evitadas": 1475.4,
+      "costo": 34984.83
+    },
+    {
+      "frac_llamadas": 0.95,
+      "eleccion": "modelo",
+      "evitadas": 1548.8,
+      "costo": 36773.54
+    },
+    {
+      "frac_llamadas": 0.95,
+      "eleccion": "azar",
+      "evitadas": 1525.9,
+      "costo": 36773.54
+    },
+    {
+      "frac_llamadas": 1.0,
+      "eleccion": "modelo",
+      "evitadas": 1576.0,
+      "costo": 38564.57
+    },
+    {
+      "frac_llamadas": 1.0,
+      "eleccion": "azar",
+      "evitadas": 1576.0,
+      "costo": 38564.57
+    }
+  ],
+  "estrategias_prueba": [
+    {
+      "estrategia": "Sin recordatorios",
+      "inasistencias_reales": 4882,
+      "evitadas": 0.0,
+      "tasa_resultante": 0.1846,
+      "reduccion_relativa": 0.0,
+      "costo_total": 0.0,
+      "costo_por_evitada": null,
+      "llamadas": 0
+    },
+    {
+      "estrategia": "SMS a todas las citas (práctica actual)",
+      "inasistencias_reales": 4882,
+      "evitadas": 633.9,
+      "tasa_resultante": 0.1606,
+      "reduccion_relativa": 0.1298,
+      "costo_total": 4205.25,
+      "costo_por_evitada": 6.63,
+      "llamadas": 0
+    },
+    {
+      "estrategia": "Llamar a todas las citas",
+      "inasistencias_reales": 4882,
+      "evitadas": 1576.0,
+      "tasa_resultante": 0.125,
+      "reduccion_relativa": 0.3228,
+      "costo_total": 56700.0,
+      "costo_por_evitada": 35.98,
+      "llamadas": 23625
+    },
+    {
+      "estrategia": "SMS a todos + llamada al 20 % elegido al azar",
+      "inasistencias_reales": 4882,
+      "evitadas": 951.6,
+      "tasa_resultante": 0.1486,
+      "reduccion_relativa": 0.1949,
+      "costo_total": 16898.85,
+      "costo_por_evitada": 17.76,
+      "llamadas": 5289
+    },
+    {
+      "estrategia": "SMS a todos + llamada al 20 % con más días de espera",
+      "inasistencias_reales": 4882,
+      "evitadas": 941.9,
+      "tasa_resultante": 0.149,
+      "reduccion_relativa": 0.1929,
+      "costo_total": 16898.85,
+      "costo_por_evitada": 17.94,
+      "llamadas": 5289
+    },
+    {
+      "estrategia": "SMS a todos + llamada al 20 % de mayor riesgo (modelo)",
+      "inasistencias_reales": 4882,
+      "evitadas": 1010.1,
+      "tasa_resultante": 0.1464,
+      "reduccion_relativa": 0.2069,
+      "costo_total": 16898.85,
+      "costo_por_evitada": 16.73,
+      "llamadas": 5289
+    },
+    {
+      "estrategia": "SMS a todos + llamada al 20 % de mayor beneficio por sol (modelo)",
+      "inasistencias_reales": 4882,
+      "evitadas": 1037.7,
+      "tasa_resultante": 0.1453,
+      "reduccion_relativa": 0.2125,
+      "costo_total": 16898.85,
+      "costo_por_evitada": 16.29,
+      "llamadas": 5289
+    },
+    {
+      "estrategia": "Sistema propuesto (reglas por anticipación, riesgo y canal)",
+      "inasistencias_reales": 4882,
+      "evitadas": 1064.4,
+      "tasa_resultante": 0.1443,
+      "reduccion_relativa": 0.218,
+      "costo_total": 19182.96,
+      "costo_por_evitada": 18.02,
+      "llamadas": 5290,
+      "visitas": 176
+    },
+    {
+      "estrategia": "Sistema propuesto sin visitas domiciliarias",
+      "inasistencias_reales": 4882,
+      "evitadas": 1037.9,
+      "tasa_resultante": 0.1453,
+      "reduccion_relativa": 0.2126,
+      "costo_total": 14782.96,
+      "costo_por_evitada": 14.24,
+      "llamadas": 5290
+    }
+  ],
+  "efecto_sms_ipw": {
+    "rr": 0.835,
+    "reduccion_relativa": 0.165,
+    "ic95_reduccion": [
+      0.147,
+      0.184
+    ],
+    "citas": 60017,
+    "variables_ajuste": [
+      "dias_anticipacion",
+      "edad",
+      "faltas_previas",
+      "tasa_zona",
+      "dia_semana",
+      "subsidio",
+      "hipertension",
+      "diabetes",
+      "sexo_f"
+    ]
+  },
+  "intervalos": {
+    "reduccion_relativa_sistema_ic95": [
+      0.2135,
+      0.2219
+    ],
+    "ahorro_frente_a_sms_a_todos_ic95": [
+      -15693.96,
+      -14279.01
+    ]
+  },
+  "muestras_100": {
+    "n_muestras": 1000,
+    "citas_por_muestra": 100,
+    "marcadas_por_muestra": 20,
+    "inasistencias_promedio": 26.0,
+    "encontradas_modelo": 7.4,
+    "encontradas_regla_anticipacion": 6.1,
+    "encontradas_azar": 5.2,
+    "modelo_supera_azar_pct": 0.769,
+    "modelo_empata_azar_pct": 0.102,
+    "modelo_rango_p5_p95": [
+      4,
+      11
+    ],
+    "azar_rango_p5_p95": [
+      2,
+      8
+    ],
+    "muestra_fija": {
+      "inasistencias": 21,
+      "encontradas_en_20_marcadas": 5
+    }
+  },
+  "piloto": {
+    "tasa_base_agendadas": 0.26,
+    "citas_por_grupo_para_detectar": {
+      "10 %": 4319,
+      "15 %": 1885,
+      "20 %": 1040,
+      "30 %": 444
+    }
+  },
+  "citas_prueba": 26449,
+  "supuestos": {
+    "efecto_llamada": 0.39,
+    "costos": {
+      "whatsapp": 0.089,
+      "sms": 0.089,
+      "llamada": 2.4,
+      "visita": 25.0,
+      "valor_consulta": 30.0
+    },
+    "frac_llamadas": 0.2
+  }
+}

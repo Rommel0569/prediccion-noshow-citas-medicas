@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1090" viewBox="0 0 1200 1090" font-family="Segoe UI, Arial, sans-serif">
+<defs><marker id="a" viewBox="0 0 10 10" markerWidth="5" markerHeight="5" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2F6FB2"/></marker><marker id="b" viewBox="0 0 10 10" markerWidth="5" markerHeight="5" refX="2" refY="5" orient="auto"><path d="M10,0 L0,5 L10,10 z" fill="#2F6FB2"/></marker></defs>
+<rect width="1200" height="1090" fill="white"/>
+<text x="510.0" y="26" text-anchor="middle" font-size="13" font-weight="700" fill="#555">CAPA · RESPONSABILIDAD · MÓDULO DEL PROTOTIPO</text>
+<text x="972.5" y="26" text-anchor="middle" font-size="13" font-weight="700" fill="#555">QUÉ SE TIENE QUE HACER PARA APLICARLO</text>
+<rect x="300" y="44" width="420" height="50" rx="25" fill="white" stroke="#1a1a1a" stroke-width="2"/>
+<text x="510.0" y="74" text-anchor="middle" font-size="14.5" font-weight="700" fill="#111">ENTRADA: CSV de citas del establecimiento</text>
+<line x1="510.0" y1="94" x2="510.0" y2="130" stroke="#2F6FB2" stroke-width="2.4" marker-end="url(#a)"/>
+<ellipse cx="140" cy="69" rx="120" ry="38" fill="white" stroke="#1a1a1a" stroke-width="2"/>
+<text x="140" y="65" text-anchor="middle" font-size="13.5" font-weight="700" fill="#111">ESTABLECIMIENTO</text>
+<text x="140" y="83" text-anchor="middle" font-size="13.5" font-weight="700" fill="#111">(HIS / EsSI / SIHCE)</text>
+<line x1="260" y1="69" x2="300" y2="69" stroke="#2F6FB2" stroke-width="2.4" marker-end="url(#a)"/>
+<rect x="300" y="130" width="420" height="82" rx="12" fill="white" stroke="#1a1a1a" stroke-width="2"/>
+<text x="510.0" y="158" text-anchor="middle" font-size="16" font-weight="700" fill="#111">CAPA 1 · DATOS</text>
+<text x="510.0" y="180" text-anchor="middle" font-size="12.5" font-style="italic" fill="#333">Verificar columnas, limpiar y estandarizar</text>
+<text x="510.0" y="200" text-anchor="middle" font-size="12" font-family="Consolas, monospace" fill="#2F6FB2">noshow/datos.py · config/*.yaml</text>
+<rect x="760" y="124" width="425" height="94" rx="8" fill="#FBFBFB" stroke="#bbb"/>
+<text x="772" y="144" font-size="12" font-weight="700" fill="#C0392B">HACER</text>
+<text x="772" y="164" font-size="12" fill="#222">• Exportar historial de citas a CSV (1 fila = 1 cita)</text>
+<text x="772" y="181" font-size="12" fill="#222">• Anonimizar id_paciente (hash del DNI / historia)</text>
+<text x="772" y="198" font-size="12" fill="#222">• Mapear columnas locales en config/mi_hospital.yaml</text>
+<line x1="720" y1="171.0" x2="760" y2="171.0" stroke="#999" stroke-width="1.5" stroke-dasharray="4,4"/>
+<line x1="510.0" y1="212" x2="510.0" y2="270" stroke="#2F6FB2" stroke-width="2.4" marker-end="url(#a)"/>
+<rect x="438.6" y="228.0" width="142.8" height="26" rx="6" fill="white" stroke="#bbb"/>
+<text x="510.0" y="245.0" text-anchor="middle" font-size="12" fill="#C0392B">DataFrame estándar</text>
+<rect x="300" y="270" width="420" height="82" rx="12" fill="white" stroke="#1a1a1a" stroke-width="2"/>
+<text x="510.0" y="298" text-anchor="middle" font-size="16" font-weight="700" fill="#111">CAPA 2 · VARIABLES</text>
+<text x="510.0" y="320" text-anchor="middle" font-size="12.5" font-style="italic" fill="#333">Faltas previas · tasa de zona · especialidad y turno*</text>
+<text x="510.0" y="340" text-anchor="middle" font-size="12" font-family="Consolas, monospace" fill="#2F6FB2">noshow/variables.py</text>
+<rect x="760" y="264" width="425" height="94" rx="8" fill="#FBFBFB" stroke="#bbb"/>
+<text x="772" y="284" font-size="12" font-weight="700" fill="#C0392B">HACER</text>
+<text x="772" y="304" font-size="12" fill="#222">• Usar el distrito del paciente como zona</text>
+<text x="772" y="321" font-size="12" fill="#222">• Conseguir ≥ 1 año de historial por paciente</text>
+<text x="772" y="338" font-size="12" fill="#222">• Incluir especialidad y turno: entran solos al reentrenar</text>
+<line x1="720" y1="311.0" x2="760" y2="311.0" stroke="#999" stroke-width="1.5" stroke-dasharray="4,4"/>
+<line x1="510.0" y1="352" x2="510.0" y2="410" stroke="#2F6FB2" stroke-width="2.4" marker-end="url(#a)"/>
+<rect x="349.5" y="368.0" width="321.0" height="26" rx="6" fill="white" stroke="#bbb"/>
+<text x="510.0" y="385.0" text-anchor="middle" font-size="12" fill="#C0392B">Matriz de 8 variables (+2 con datos locales*)</text>
+<rect x="300" y="410" width="420" height="82" rx="12" fill="white" stroke="#1a1a1a" stroke-width="2"/>
+<text x="510.0" y="438" text-anchor="middle" font-size="16" font-weight="700" fill="#111">CAPA 3 · MODELO</text>
+<text x="510.0" y="460" text-anchor="middle" font-size="12.5" font-style="italic" fill="#333">Entrenar / recalibrar · niveles por percentil · SHAP</text>
+<text x="510.0" y="480" text-anchor="middle" font-size="12" font-family="Consolas, monospace" fill="#2F6FB2">noshow/modelo.py · entrenar.py · recalibrar.py</text>
+<rect x="760" y="404" width="425" height="94" rx="8" fill="#FBFBFB" stroke="#bbb"/>
+<text x="772" y="424" font-size="12" font-weight="700" fill="#C0392B">HACER</text>
+<text x="772" y="444" font-size="12" fill="#222">• Sin datos: modelo base · ≥ 200 citas: recalibrar</text>
+<text x="772" y="461" font-size="12" fill="#222">• ≥ 1 año: reentrenar y comparar AUC por tramo</text>
+<text x="772" y="478" font-size="12" fill="#222">• Fijar % de riesgo alto = capacidad de llamadas</text>
+<line x1="720" y1="451.0" x2="760" y2="451.0" stroke="#999" stroke-width="1.5" stroke-dasharray="4,4"/>
+<line x1="510.0" y1="492" x2="510.0" y2="550" stroke="#2F6FB2" stroke-width="2.4" marker-end="url(#a)"/>
+<rect x="372.6" y="508.0" width="274.79999999999995" height="26" rx="6" fill="white" stroke="#bbb"/>
+<text x="510.0" y="525.0" text-anchor="middle" font-size="12" fill="#C0392B">Probabilidad + nivel (bajo/medio/alto)</text>
+<rect x="300" y="550" width="420" height="82" rx="12" fill="white" stroke="#1a1a1a" stroke-width="2"/>
+<text x="510.0" y="578" text-anchor="middle" font-size="16" font-weight="700" fill="#111">CAPA 4 · REGLAS RIESGO × CANAL</text>
+<text x="510.0" y="600" text-anchor="middle" font-size="12.5" font-style="italic" fill="#333">Llamadas por beneficio · acción, canal y costo</text>
+<text x="510.0" y="620" text-anchor="middle" font-size="12" font-family="Consolas, monospace" fill="#2F6FB2">noshow/recomendacion.py</text>
+<rect x="760" y="544" width="425" height="94" rx="8" fill="#FBFBFB" stroke="#bbb"/>
+<text x="772" y="564" font-size="12" font-weight="700" fill="#C0392B">HACER</text>
+<text x="772" y="584" font-size="12" fill="#222">• Registrar canal_disponible al agendar la cita</text>
+<text x="772" y="601" font-size="12" fill="#222">• Reemplazar costos supuestos por costos locales</text>
+<text x="772" y="618" font-size="12" fill="#222">• Plantillas de mensaje y guion de llamada</text>
+<line x1="720" y1="591.0" x2="760" y2="591.0" stroke="#999" stroke-width="1.5" stroke-dasharray="4,4"/>
+<line x1="510.0" y1="632" x2="510.0" y2="690" stroke="#2F6FB2" stroke-width="2.4" marker-end="url(#a)"/>
+<rect x="422.1" y="648.0" width="175.79999999999998" height="26" rx="6" fill="white" stroke="#bbb"/>
+<text x="510.0" y="665.0" text-anchor="middle" font-size="12" fill="#C0392B">Acción y canal por cita</text>
+<rect x="300" y="690" width="420" height="82" rx="12" fill="white" stroke="#1a1a1a" stroke-width="2"/>
+<text x="510.0" y="718" text-anchor="middle" font-size="16" font-weight="700" fill="#111">CAPA 5 · CONFIRMACIÓN Y CUPOS</text>
+<text x="510.0" y="740" text-anchor="middle" font-size="12.5" font-style="italic" fill="#333">Liberar a las 24 h · reasignar a lista de espera</text>
+<text x="510.0" y="760" text-anchor="middle" font-size="12" font-family="Consolas, monospace" fill="#2F6FB2">noshow/cupos.py</text>
+<rect x="760" y="684" width="425" height="94" rx="8" fill="#FBFBFB" stroke="#bbb"/>
+<text x="772" y="704" font-size="12" font-weight="700" fill="#C0392B">HACER</text>
+<text x="772" y="724" font-size="12" fill="#222">• Registrar respuesta de cada contacto (auditoría)</text>
+<text x="772" y="741" font-size="12" fill="#222">• Lista de espera por especialidad y antigüedad</text>
+<text x="772" y="758" font-size="12" fill="#222">• Protocolo para ofrecer el cupo liberado</text>
+<line x1="720" y1="731.0" x2="760" y2="731.0" stroke="#999" stroke-width="1.5" stroke-dasharray="4,4"/>
+<line x1="510.0" y1="772" x2="510.0" y2="830" stroke="#2F6FB2" stroke-width="2.4" marker-end="url(#a)"/>
+<rect x="402.3" y="788.0" width="215.39999999999998" height="26" rx="6" fill="white" stroke="#bbb"/>
+<text x="510.0" y="805.0" text-anchor="middle" font-size="12" fill="#C0392B">Cupos liberados y reasignados</text>
+<rect x="300" y="830" width="420" height="82" rx="12" fill="white" stroke="#1a1a1a" stroke-width="2"/>
+<text x="510.0" y="858" text-anchor="middle" font-size="16" font-weight="700" fill="#111">CAPA 6 · IMPACTO</text>
+<text x="510.0" y="880" text-anchor="middle" font-size="12.5" font-style="italic" fill="#333">Inasistencias evitadas · costo por evitada · escenarios</text>
+<text x="510.0" y="900" text-anchor="middle" font-size="12" font-family="Consolas, monospace" fill="#2F6FB2">noshow/impacto.py</text>
+<rect x="760" y="824" width="425" height="94" rx="8" fill="#FBFBFB" stroke="#bbb"/>
+<text x="772" y="844" font-size="12" font-weight="700" fill="#C0392B">HACER</text>
+<text x="772" y="864" font-size="12" fill="#222">• Medir línea base antes de intervenir (1–3 meses)</text>
+<text x="772" y="881" font-size="12" fill="#222">• Comparar tasa por canal y por nivel de riesgo</text>
+<text x="772" y="898" font-size="12" fill="#222">• Reportar mensualmente a la jefatura</text>
+<line x1="720" y1="871.0" x2="760" y2="871.0" stroke="#999" stroke-width="1.5" stroke-dasharray="4,4"/>
+<line x1="510.0" y1="912" x2="510.0" y2="970" stroke="#2F6FB2" stroke-width="2.4" marker-end="url(#a)"/>
+<rect x="461.7" y="928.0" width="96.6" height="26" rx="6" fill="white" stroke="#bbb"/>
+<text x="510.0" y="945.0" text-anchor="middle" font-size="12" fill="#C0392B">Indicadores</text>
+<rect x="300" y="970" width="420" height="82" rx="12" fill="white" stroke="#1a1a1a" stroke-width="2"/>
+<text x="510.0" y="998" text-anchor="middle" font-size="16" font-weight="700" fill="#111">CAPA 7 · PRESENTACIÓN</text>
+<text x="510.0" y="1020" text-anchor="middle" font-size="12.5" font-style="italic" fill="#333">Cita · agenda · cupos · desempeño · otro lugar</text>
+<text x="510.0" y="1040" text-anchor="middle" font-size="12" font-family="Consolas, monospace" fill="#2F6FB2">app.py (Streamlit)</text>
+<rect x="760" y="964" width="425" height="94" rx="8" fill="#FBFBFB" stroke="#bbb"/>
+<text x="772" y="984" font-size="12" font-weight="700" fill="#C0392B">HACER</text>
+<text x="772" y="1004" font-size="12" fill="#222">• Capacitar al personal de citas (1 sesión)</text>
+<text x="772" y="1021" font-size="12" fill="#222">• Futuro: API REST (FastAPI) e integración</text>
+<text x="772" y="1038" font-size="12" fill="#222">• Futuro: gateway SMS / WhatsApp automático</text>
+<line x1="720" y1="1011.0" x2="760" y2="1011.0" stroke="#999" stroke-width="1.5" stroke-dasharray="4,4"/>
+<ellipse cx="140" cy="620" rx="105" ry="36" fill="white" stroke="#1a1a1a" stroke-width="2"/>
+<text x="140" y="625" text-anchor="middle" font-size="13.5" font-weight="700" fill="#111">PACIENTE</text>
+<line x1="245" y1="605" x2="300" y2="605" stroke="#2F6FB2" stroke-width="2.4" marker-end="url(#a)" marker-start="url(#b)"/>
+<rect x="75.0" y="534.0" width="150" height="44" rx="6" fill="white" stroke="#bbb"/>
+<text x="150" y="551.0" text-anchor="middle" font-size="12" fill="#C0392B">WhatsApp / SMS /</text>
+<text x="150" y="569.0" text-anchor="middle" font-size="12" fill="#C0392B">llamada / visita</text>
+<line x1="200" y1="654" x2="300" y2="731.0" stroke="#2F6FB2" stroke-width="2.4" marker-end="url(#a)" stroke-dasharray="6,5"/>
+<rect x="105.0" y="727.0" width="170" height="26" rx="6" fill="white" stroke="#bbb"/>
+<text x="190" y="744.0" text-anchor="middle" font-size="12" fill="#C0392B">confirma / no responde</text>
+<ellipse cx="140" cy="1011" rx="125" ry="40" fill="white" stroke="#1a1a1a" stroke-width="2"/>
+<text x="140" y="1007" text-anchor="middle" font-size="13.5" font-weight="700" fill="#111">PERSONAL DE</text>
+<text x="140" y="1025" text-anchor="middle" font-size="13.5" font-weight="700" fill="#111">CITAS / ADMISIÓN</text>
+<line x1="265" y1="1011" x2="300" y2="1011" stroke="#2F6FB2" stroke-width="2.4" marker-end="url(#a)" marker-start="url(#b)"/>
+<ellipse cx="140" cy="451" rx="120" ry="40" fill="white" stroke="#1a1a1a" stroke-width="2" stroke-dasharray="7,5"/>
+<text x="140" y="447" text-anchor="middle" font-size="13.5" font-weight="700" fill="#111">OTRO HOSPITAL</text>
+<text x="140" y="465" text-anchor="middle" font-size="13.5" font-weight="700" fill="#111">(datos locales)</text>
+<line x1="260" y1="451" x2="300" y2="451" stroke="#2F6FB2" stroke-width="2.4" marker-end="url(#a)" stroke-dasharray="6,5"/>
+<rect x="55.0" y="385.0" width="190" height="26" rx="6" fill="white" stroke="#bbb"/>
+<text x="150" y="402.0" text-anchor="middle" font-size="12" fill="#C0392B">recalibrar.py / entrenar.py</text>
+<text x="300" y="1078" font-size="11.5" font-style="italic" fill="#555">* Especialidad y turno no están en el dataset de Brasil; se usan cuando el establecimiento los registra.</text>
+</svg>

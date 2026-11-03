@@ -1,0 +1,30 @@
+{
+  "datos": "Brasil - Kaggle Medical Appointment No Shows (2016)",
+  "resultados": [
+    {
+      "enfoque": "Modelo único (el del sistema)",
+      "auc_agendadas": 0.5985,
+      "captura_top_agendadas": 0.2823
+    },
+    {
+      "enfoque": "Un modelo por grupo: Por anticipación (mismo día, 1-7, 8-30, >30 días)",
+      "auc_agendadas": 0.5782,
+      "captura_top_agendadas": 0.2697
+    },
+    {
+      "enfoque": "Un modelo por grupo: Mismo día aparte y agendadas aparte",
+      "auc_agendadas": 0.5983,
+      "captura_top_agendadas": 0.2739
+    },
+    {
+      "enfoque": "Un modelo por grupo: Por grupo de edad (<18, 18-59, ≥60)",
+      "auc_agendadas": 0.5814,
+      "captura_top_agendadas": 0.2728
+    },
+    {
+      "enfoque": "Un modelo por grupo: Pacientes con y sin inasistencias previas",
+      "auc_agendadas": 0.5848,
+      "captura_top_agendadas": 0.2721
+    }
+  ]
+}

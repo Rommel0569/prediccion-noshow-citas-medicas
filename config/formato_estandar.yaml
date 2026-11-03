@@ -1,0 +1,35 @@
+# Configuración para archivos que ya vienen en el formato estándar del sistema
+# (por ejemplo datos/plantilla_citas.csv o datos/agenda_demo.csv).
+nombre: "Formato estándar"
+archivo_datos: "../datos/plantilla_citas.csv"
+
+columnas:
+  id_paciente: id_paciente
+  id_cita: id_cita
+  sexo: sexo
+  fecha_registro: fecha_registro
+  fecha_cita: fecha_cita
+  edad: edad
+  zona: zona
+  subsidio: subsidio
+  hipertension: hipertension
+  diabetes: diabetes
+  recordatorio: recordatorio
+  canal_disponible: canal_disponible
+  servicio: servicio
+  turno: turno
+  falto: falto
+
+valores:
+  falto_si: [1, "1", "Si", "Sí", "SI", "Yes", "yes", "True", "true"]
+  sexo_femenino: ["F", "f", "Femenino", "FEMENINO"]
+  verdadero: [1, "1", "Si", "Sí", "SI", "Yes", "yes", "True", "true"]
+
+entrenamiento: {proporcion_validacion: 0.2, proporcion_prueba: 0.2, suavizado_zona: 50, semilla: 42}
+niveles: {alto_percentil: 0.20, medio_percentil: 0.30}
+costos: {whatsapp: 0.089, sms: 0.089, llamada: 2.40, visita: 25.00, valor_consulta: 30.00}
+efecto_canal: {whatsapp: 0.29, sms: 0.29, llamada: 0.39, visita: 0.39, ninguno: 0.0}
+canales_simulados:
+  general:     {whatsapp: 0.802, sms_voz: 0.107, ninguno: 0.091}
+  adulto_mayor: {whatsapp: 0.483, sms_voz: 0.365, ninguno: 0.152}
+reasignacion: {horas_limite_confirmacion: 24}
