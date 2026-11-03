@@ -4,9 +4,11 @@ twilio:              # opcional: SMS y llamadas con mensaje (la cuenta de prueba
   account_sid: ""
   auth_token: ""
   desde: ""          # número de origen de Twilio, formato +1...
+  # url_llamada: "https://handler.twilio.com/twiml/EH..."   # SOLO cuenta de prueba: URL de un TwiML Bin con el mensaje hablado
   # plantilla_sms: "sms_appointment_reminders"   # SOLO cuenta de prueba: Twilio no admite texto propio y envía su plantilla fija
 # llm_libre:         # opcional y gratuito (p. ej. Ollama local): solo para conversación fuera de tema, nunca ejecuta acciones
 #   base_url: "http://localhost:11434/v1"
 #   modelo: "llama3.2"
 #   api_key: ""
+
 

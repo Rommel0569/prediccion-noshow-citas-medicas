@@ -74,8 +74,9 @@ class Telegram:
 class Twilio:
     nombre = "twilio"
 
-    def __init__(self, sid, token, desde, base="https://api.twilio.com", plantilla_sms=None):
+    def __init__(self, sid, token, desde, base="https://api.twilio.com", plantilla_sms=None, url_llamada=None):
         self.sid, self.token, self.desde, self.base = sid, token, desde, base.rstrip("/")
+        self.url_llamada = url_llamada          # cuenta de prueba: la llamada solo admite una URL de TwiML ya publicada (TwiML Bin)
         self.plantilla_sms = plantilla_sms      # cuenta de prueba: solo admite plantillas predefinidas (el texto lo fija Twilio)
 
     def _crear(self, recurso, datos):
@@ -93,7 +94,9 @@ class Twilio:
         return self._crear("Messages", {"To": a, "From": self.desde, "Body": self.plantilla_sms or texto})
 
     def llamar(self, a, texto):
-        """Llamada con un mensaje hablado (sin captura de respuesta)."""
+        """Llamada con un mensaje hablado (sin captura de respuesta). Con `url_llamada` usa esa URL de TwiML."""
+        if self.url_llamada:
+            return self._crear("Calls", {"To": a, "From": self.desde, "Url": self.url_llamada})
         twiml = f'<Response><Say language="es-MX" voice="alice">{escape(texto)}</Say></Response>'
         return self._crear("Calls", {"To": a, "From": self.desde, "Twiml": twiml})
 
@@ -113,9 +116,11 @@ def cargar_canales():
     base_tw = os.getenv("TWILIO_API_BASE") or tw.get("base_url") or "https://api.twilio.com"
     return {
         "telegram": Telegram(token, base) if token else None,
-        "twilio": Twilio(sid, auth, desde, base_tw, os.getenv("TWILIO_PLANTILLA_SMS") or tw.get("plantilla_sms"))
+        "twilio": Twilio(sid, auth, desde, base_tw, os.getenv("TWILIO_PLANTILLA_SMS") or tw.get("plantilla_sms"),
+                       os.getenv("TWILIO_URL_LLAMADA") or tw.get("url_llamada"))
         if sid and auth and desde else None,
     }
+
 
 
 
