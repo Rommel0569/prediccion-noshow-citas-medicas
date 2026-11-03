@@ -1,4 +1,4 @@
-"""Admisión de pacientes: registro de datos, consentimiento y vinculación a Telegram mediante QR o enlace."""
+﻿"""Admisión de pacientes: registro de datos, consentimiento y vinculación a Telegram mediante QR o enlace."""
 import pandas as pd
 import streamlit as st
 
@@ -39,13 +39,13 @@ with st.form("form_paciente", clear_on_submit=False):
     edad = b.number_input("Edad", 0, 110, 35)
     zona = d.selectbox("Distrito de residencia", ["(otro)"] + zonas)
     e, f = st.columns([2, 1])
-    tel = e.text_input("Teléfono celular", placeholder="+51 930 000 000", help="Se usa para verificar la identidad del paciente en Telegram.")
+    tel = e.text_input("Teléfono celular", placeholder="+51 930 000 000", help="Se usa para SMS y llamadas, y para verificar la identidad del paciente en Telegram.")
     with f:
         st.markdown("<div style='height:1.7rem'></div>", unsafe_allow_html=True)
         subsidio = st.checkbox("Seguro subsidiado (SIS)")
     g1, g2, _ = st.columns([1, 1, 2])
     hta, dm = g1.checkbox("Hipertensión"), g2.checkbox("Diabetes")
-    consiente = st.checkbox("El paciente autoriza recibir avisos de sus citas por Telegram")
+    consiente = st.checkbox("El paciente autoriza recibir avisos de sus citas por Telegram, SMS y llamadas")
     enviar = st.form_submit_button("Registrar y generar QR", type="primary")
 
 if enviar:
@@ -59,6 +59,7 @@ if enviar:
     else:
         telefono = "+" + digitos if len(digitos) > 9 else "+51" + digitos
         almacen.registrar_paciente(id_pac.strip(), edad, "" if zona == "(otro)" else zona, subsidio, hta, dm, telefono, True)
+        almacen.registrar_destinatario(id_pac.strip(), "telefono", telefono)      # con su consentimiento, el teléfono pasa a ser canal de SMS y llamadas
         st.session_state["enlace_paciente"] = (id_pac.strip(), None)
         if canales["telegram"]:
             try:
@@ -110,3 +111,4 @@ if canales["telegram"]:
                 st.rerun()
             except ErrorCanal as ex:
                 st.error(str(ex))
+

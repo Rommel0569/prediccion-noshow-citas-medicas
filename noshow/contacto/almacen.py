@@ -252,6 +252,11 @@ def contactos_existentes():
     return hechos | {(r["id_cita"], r["tipo"]) for r in agotados}
 
 
+def contar_errores(id_cita, tipo):
+    r = _consultar("SELECT COUNT(*) AS n FROM contactos WHERE id_cita=? AND tipo=? AND estado='error'", (str(id_cita), tipo))
+    return int(r[0]["n"])
+
+
 def listar_contactos():
     return _df("SELECT * FROM contactos ORDER BY id DESC")
 
@@ -399,6 +404,7 @@ def derivar_a_personal(id_paciente, motivo, id_cita=""):
     return _ejecutar(
         "INSERT INTO contactos(id_cita,id_paciente,canal,tipo,fecha_cita,creado,estado,referencia) VALUES(?,?,?,?,?,?,?,?)",
         (str(id_cita), str(id_paciente), "personal", "consulta", "", ahora(), "pendiente_manual", motivo[:200]))
+
 
 
 

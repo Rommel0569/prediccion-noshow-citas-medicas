@@ -10,7 +10,7 @@ os.environ["NOSHOW_DB"] = os.path.join(tempfile.mkdtemp(), "auto.db")
 
 import mocks_pruebas as mocks                         # noqa: E402
 from noshow.config import RAIZ                        # noqa: E402
-from noshow.contacto import agenda_db, almacen, respuestas, trabajador   # noqa: E402
+from noshow.contacto import agenda_db, almacen, despacho, respuestas, trabajador   # noqa: E402
 from noshow.modelo import SistemaRiesgo               # noqa: E402
 
 estado, canales, servidor = mocks.iniciar()
@@ -114,7 +114,18 @@ try:
 except Exception:
     verificar("con el canal caído el ciclo termina y registra el error (reintenta después)", False)
 
+# --- si la llamada automática falla, el paciente no queda sin contacto: pasa al personal
+import pandas as pd                                    # noqa: E402
+almacen.registrar_destinatario("H", "telefono", "+51900000010")
+fila = pd.DataFrame([{"id_cita": "X1", "id_paciente": "H", "tipo": "llamada", "destino": "Llamada automática", "estado": "Listo",
+                      "fecha_cita": pd.Timestamp(dia(2)), "servicio": "", "dias": 2, "nivel": "alto"}])
+res, _ = despacho.ejecutar(fila, canales, "Hospital")
+pend = almacen.pendientes_manuales()
+verificar("si la llamada automática falla, el paciente pasa al personal",
+          res.get("derivados_al_personal") == 1 and (not pend.empty) and (pend["id_cita"] == "X1").any())
+
 print(f"\n{sum(resultados)}/{len(resultados)} verificaciones correctas")
 raise SystemExit(0 if all(resultados) else 1)
+
 
 

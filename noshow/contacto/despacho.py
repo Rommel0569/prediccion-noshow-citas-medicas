@@ -1,4 +1,4 @@
-"""Plan y ejecución del contacto: convierte la agenda priorizada en envíos, llamadas y registro, según el canal
+﻿"""Plan y ejecución del contacto: convierte la agenda priorizada en envíos, llamadas y registro, según el canal
 verificado de cada paciente (Telegram, SMS o llamada de Twilio, o el personal)."""
 import re
 from collections import Counter
@@ -140,5 +140,12 @@ def ejecutar(plan_df, canales, establecimiento, limite=None):
             almacen.registrar_contacto(*base, r["destino"], tipo, f, "error", error=str(e))
             resumen["errores"] += 1
             errores.append(str(e))
+            # un canal que falla no deja al paciente sin contacto: la llamada automática pasa de inmediato al personal y
+            # los mensajes, tras 3 intentos fallidos
+            if r["destino"] == "Llamada automática" or almacen.contar_errores(r["id_cita"], tipo) >= 3:
+                almacen.registrar_contacto(*base, "llamada" if tipo == "llamada" else "personal", tipo, f, "pendiente_manual",
+                                           referencia="Falló el canal automático: gestionar manualmente")
+                resumen["derivados_al_personal"] += 1
     resumen["omitidos"] = int((plan_df["estado"] != "Listo").sum())
     return dict(resumen), errores
+
