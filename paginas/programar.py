@@ -1,10 +1,12 @@
-"""Programación de citas: evaluación del riesgo y acción recomendada al momento de agendar."""
+﻿"""Programación de citas: evaluación del riesgo y acción recomendada al momento de agendar."""
 from datetime import date, timedelta
 
 import pandas as pd
 import streamlit as st
 
 from interfaz import comun as c
+from noshow import parametros
+from noshow.contacto import almacen
 from noshow.recomendacion import recomendar
 
 sistema, historial, cfg = c.cargar_sistema(), c.cargar_historial(), c.cfg_activa()
@@ -104,3 +106,18 @@ with der:
                         + c.html_factores(factores) + "</div>", unsafe_allow_html=True)
         except Exception as e:   # la explicación no debe impedir usar la predicción
             st.info(f"Explicación no disponible: {e}")
+
+        # ---------------------------------------------------------------- agendar de verdad
+        st.markdown('<div class="panel" style="margin-top:14px"><div class="rotulo">Agendar esta cita</div></div>', unsafe_allow_html=True)
+        registrado = almacen.obtener_paciente(id_buscar.strip()) if id_buscar.strip() else None
+        if not registrado:
+            c.nota("Para agendar, el paciente debe estar registrado en Admisión de pacientes.")
+        else:
+            a1, a2 = st.columns(2)
+            servicio_cita = a1.selectbox("Especialidad", parametros.servicios(), key="agendar_servicio")
+            turno_cita = a2.radio("Turno", ["Mañana", "Tarde"], horizontal=True, key="agendar_turno")
+            if st.button("Agendar cita", type="primary"):
+                nueva = almacen.agendar_cita(id_buscar.strip(), f_cita, servicio_cita, turno_cita, f_reg)
+                st.success(f"Cita {nueva} agendada. Desde ahora el sistema la gestiona solo: contacta al paciente por su canal "
+                           "verificado, escala si no responde y libera el cupo si hace falta.")
+

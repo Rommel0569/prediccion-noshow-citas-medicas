@@ -6,3 +6,4 @@ datos/KaggleV2-May-2016.csv
 datos/operacion.db
 config/canales.local.yaml
 config/equipo.local.csv
+.env

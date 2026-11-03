@@ -1,15 +1,16 @@
-"""Configuración: parámetros de operación del establecimiento."""
+﻿"""Configuración: parámetros de operación del establecimiento."""
 import pandas as pd
 import streamlit as st
 
 from interfaz import comun as c
+from noshow import parametros as parametros_mod
 
 sistema = c.cargar_sistema()
 base, vigente = c.parametros_base(), c.parametros()
 cfg = c.cfg_activa()
 
 c.encabezado("Configuración", "Parámetros de operación del establecimiento",
-             "Los cambios se aplican a toda la sesión")
+             "Los cambios los usan la web y el servicio del bot")
 
 c.seccion("Capacidad y costos")
 with st.form("form_parametros"):
@@ -22,17 +23,16 @@ with st.form("form_parametros"):
     vis = e.number_input("Visita domiciliaria (S/)", 0.0, 500.0, float(vigente["visita"]), 1.0, format="%.2f")
     consulta = st.number_input("Valor de una consulta perdida (S/)", 0.0, 1000.0, float(vigente["consulta"]), 1.0, format="%.2f")
     nombre = st.text_input("Nombre del establecimiento (aparece en los mensajes a los pacientes)",
-                           st.session_state.get("establecimiento", "Consulta externa"))
+                           parametros_mod.establecimiento())
     g1, g2 = st.columns([1, 5])
     guardar = g1.form_submit_button("Aplicar cambios", type="primary")
     restablecer = g2.form_submit_button("Restablecer valores del archivo")
 if guardar:
-    st.session_state["parametros"] = {"capacidad": cap, "sms": sms, "whatsapp": wsp, "llamada": lla, "visita": vis,
-                                      "consulta": consulta}
-    st.session_state["establecimiento"] = nombre.strip() or "Consulta externa"
-    st.success("Parámetros aplicados. La agenda se recalcula con los nuevos valores.")
+    parametros_mod.guardar({"capacidad": cap, "sms": sms, "whatsapp": wsp, "llamada": lla, "visita": vis, "consulta": consulta})
+    parametros_mod.guardar_establecimiento(nombre)
+    st.success("Parámetros guardados. Los usan la web y el servicio del bot.")
 elif restablecer:
-    st.session_state.pop("parametros", None)
+    parametros_mod.restablecer()
     st.rerun()
 c.nota("Los valores iniciales provienen de config/kaggle_brasil.yaml. El costo de SMS corresponde a una tarifa comercial "
        "peruana; la llamada, la visita y el valor de la consulta son supuestos que deben reemplazarse por costos reales del establecimiento.")
@@ -61,3 +61,4 @@ st.dataframe(pd.DataFrame([
     ("Variables", ", ".join(sistema.variables)),
     ("AUC en prueba", f"{sistema.info['prueba'][sistema.info['modelo_elegido']]['auc']:.3f}"),
 ], columns=["Característica", "Valor"]), hide_index=True, use_container_width=True)
+

@@ -5,6 +5,7 @@ import pandas as pd
 import streamlit as st
 
 from interfaz import comun as c
+from noshow import parametros
 from noshow.contacto import almacen, reasignacion
 from noshow.contacto.canales import cargar_canales
 from noshow.cupos import generar_lista_espera, liberar_y_reasignar, simular_confirmacion
@@ -61,7 +62,7 @@ if modo == "Registro de contactos":
         r3.markdown(f'<div style="padding-top:1.7rem"><b>{c.num(len(lib))}</b> cupos liberables a esa fecha y hora</div>',
                     unsafe_allow_html=True)
         if st.button("Liberar y reasignar cupos", type="primary", disabled=lib.empty):
-            _, res = reasignacion.reasignar(agenda, canales, horas, referencia, st.session_state.get("establecimiento", "Consulta externa"))
+            _, res = reasignacion.reasignar(agenda, canales, horas, referencia, parametros.establecimiento())
             st.session_state["ultimo_resultado"] = res
             st.rerun()
     if "ultimo_resultado" in st.session_state and not st.session_state["ultimo_resultado"].empty:
@@ -117,4 +118,6 @@ else:
         ("Costo de contacto (S/)", c.num(total["costo_total_contacto"], 2)),
         ("Valor de consultas recuperadas (S/)", c.num(total["valor_consultas_recuperadas"], 2)),
     ], columns=["Indicador", "Valor"]), hide_index=True, use_container_width=True)
+
+
 

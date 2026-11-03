@@ -1,0 +1,21 @@
+# Información que el bot puede dar a los pacientes. Complete con los datos reales del establecimiento.
+# Lo que quede vacío se responde con "comuníquese con admisión".
+nombre: "Consulta externa"
+horario: "Lunes a viernes de 7:30 a 18:00"
+direccion: ""          # Ej.: "Av. Ejemplo 123, Distrito, Arequipa"
+documentos: "DNI y, si tiene, su carnet de seguro (SIS o EsSalud)"
+telefono: ""           # Teléfono de admisión
+costo: ""              # Ej.: "Los asegurados al SIS no pagan; consulte la tarifa en admisión"
+servicios:             # especialidades disponibles al agendar una cita
+  - Medicina General
+  - Pediatría
+  - Ginecología
+  - Cardiología
+  - Neurología
+  - Traumatología
+  - Dermatología
+  - Oftalmología
+  - Endocrinología
+  - Gastroenterología
+  - Neumología
+  - Psiquiatría

@@ -171,36 +171,47 @@ Los archivos derivados incluidos (`modelos/sistema_historial.csv.gz`, `datos/age
 se comparten bajo la misma licencia, con atribución. Uso académico, sin pacientes reales.
 
 
-## 8. Contacto real con los pacientes
+## 8. Contacto real con los pacientes (bot y planificador autónomos)
 
-El sistema envía los recordatorios y recibe las respuestas de verdad cuando hay un canal configurado:
+El sistema contacta a los pacientes y recibe sus respuestas de verdad, **sin depender de nadie**. Está dividido en dos
+componentes independientes que comparten solo la base de datos (`datos/operacion.db`):
 
-| Canal | Qué hace | Costo |
+| Componente | Comando | Qué hace |
 |---|---|---|
-| Telegram (bot) | Envía recordatorios con botones Confirmar / Cancelar / Reprogramar y registra la respuesta | Gratis |
-| Twilio (opcional) | SMS y llamadas con mensaje hablado | De pago; la cuenta de prueba solo llega a números verificados |
-| Personal | Llamadas y visitas: quedan como pendientes y el personal registra el resultado | - |
+| **Web** (gestión) | `streamlit run app.py` | Admisión de pacientes, citas, agenda, registro de contactos, indicadores |
+| **Servicio del bot** (aparte de la web) | `python bot.py` | Atiende Telegram de forma continua y, cada 5 minutos, planifica solo los contactos |
 
-### Flujo con el paciente
+`python iniciar.py` enciende ambos con un solo comando.
 
-1. **Admisión de pacientes** registra los datos del paciente y su teléfono (con su consentimiento) y genera un **QR o enlace** de un solo uso.
-2. El paciente lo abre en Telegram. El bot lo asocia a su registro y le pide compartir su número.
-3. El bot compara el número compartido con el registrado: si coincide, activa los avisos (verificación automática); si no, los desactiva.
-4. Desde ahí recibe los recordatorios con botones y sus respuestas quedan registradas. Con `/baja` deja de recibirlos.
+### Flujo
+1. **Admisión de pacientes**: se registran sus datos (edad, distrito, seguro, hipertensión, diabetes, teléfono) con su consentimiento y se
+   genera un **QR o enlace** de un solo uso. El paciente lo abre en Telegram; el bot lo asocia a su registro y **verifica su teléfono**
+   (le pide compartir su número y lo compara con el registrado). Sin verificar no se envía ningún aviso.
+2. **Programación de citas**: se evalúa el riesgo y se **agenda** la cita (especialidad y turno); queda guardada en el sistema.
+3. **Desde ahí todo es automático**, según los datos de cada paciente (también los nuevos): el planificador evalúa cada cita con el modelo y
+   contacta por el canal que el paciente tiene verificado dentro de su ventana de tiempo (72 h confirmar, 48 h recordar):
+   Telegram (gratis); si solo tiene teléfono, SMS con un enlace para pasar a Telegram, o llamada con mensaje (Twilio); si no tiene canal,
+   queda como gestión del personal. Si no responde y falta poco, **escala a llamada**. Los cupos cancelados o sin confirmar se liberan y se
+   **ofrecen a la lista de espera**; al aceptar, el cupo pasa al paciente (se crea su cita).
+4. **Registro de asistencia** (Citas registradas): cada inasistencia real alimenta el historial del paciente para evaluar sus próximas citas.
 
-El bot atiende **de forma continua y sin intervención**, aunque nadie tenga abierta la web.
+### Conversación del bot (gratuita)
+Los pacientes escriben como en un chat normal; el bot entiende español coloquial (abreviaturas, faltas de ortografía), recuerda el contexto
+y actúa sobre **sus** citas: ver cuándo es, confirmar, cancelar (con confirmación), pedir reprogramación, horario, dirección, qué llevar,
+pasar con el personal, baja, y deriva con el 106 (SAMU) ante urgencias. Es un motor propio, sin servicios externos ni costo. Los datos
+del establecimiento que responde están en `config/establecimiento.yaml`. Opcionalmente puede apoyarse en un modelo gratuito local
+(`llm_libre`) solo para conversación fuera de tema.
 
-### Puesta en marcha con su propio bot
-
-1. En Telegram, abra **@BotFather**, envíe `/newbot` y elija un nombre y un usuario que termine en `bot`. BotFather entrega un **token**.
-2. Copie `config/canales.ejemplo.yaml` como `config/canales.local.yaml` y pegue su token (o use la variable `TELEGRAM_BOT_TOKEN`).
-3. Inicie todo con un solo comando: `python iniciar.py` (enciende el bot y la aplicación web). También se pueden iniciar por separado:
-   `python bot.py` y `streamlit run app.py`.
-4. En *Canales de contacto*, Telegram debe aparecer como *Configurado*. Registre un paciente en *Admisión de pacientes* y abra su enlace.
-5. En *Agenda y contactos* ejecute los contactos; en *Registro de contactos* verá las respuestas.
-**Seguridad: nunca suba su token ni sus teléfonos al repositorio.** `config/canales.local.yaml`, `config/equipo.local.csv` y
-`datos/operacion.db` están en `.gitignore`. Quien tenga el token controla el bot; si se expone, revóquelo con `/revoke` en BotFather.
+### Configuración (las credenciales **nunca** se suben al repositorio)
+1. **Telegram (gratis)**: con **@BotFather** cree un bot (`/newbot`) y copie el token.
+2. Copie `config/canales.ejemplo.yaml` como `config/canales.local.yaml` y pegue el token (o use `TELEGRAM_BOT_TOKEN`).
+3. **Twilio (opcional)**: cree una cuenta de prueba, verifique su número y complete `twilio` en el mismo archivo
+   (`TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_FROM`). La cuenta de prueba solo envía a números verificados.
+4. Para publicar la web, defina `APP_PASSWORD`: la aplicación exigirá contraseña antes de mostrar datos.
 
 Los teléfonos del equipo para pruebas se cargan desde `config/equipo.local.csv` (ver `config/equipo.ejemplo.csv`).
-`python probar_contacto.py` verifica el ciclo completo contra un servidor Telegram de pruebas (31 verificaciones).
+`config/canales.local.yaml`, `config/equipo.local.csv` y `datos/operacion.db` están en `.gitignore`. Si el token se expone, revóquelo
+con `/revoke` en BotFather.
 
+### Pruebas automáticas (sin red ni credenciales; usan servidores de prueba de Telegram y Twilio)
+`python probar_contacto.py` (31) · `python probar_conversacion.py` (26) · `python probar_autonomia.py` (19) · `python probar_casos.py` (11)

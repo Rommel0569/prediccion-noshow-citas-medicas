@@ -1,6 +1,10 @@
 ﻿telegram:
-  token: ""          # token que entrega @BotFather
-twilio:              # opcional (SMS y llamadas)
+  token: ""          # token que entrega @BotFather (gratis)
+twilio:              # opcional: SMS y llamadas con mensaje (la cuenta de prueba es gratis y solo llega a números verificados)
   account_sid: ""
   auth_token: ""
-  desde: ""          # número de origen, formato +1...
+  desde: ""          # número de origen de Twilio, formato +1...
+# llm_libre:         # opcional y gratuito (p. ej. Ollama local): solo para conversación fuera de tema, nunca ejecuta acciones
+#   base_url: "http://localhost:11434/v1"
+#   modelo: "llama3.2"
+#   api_key: ""

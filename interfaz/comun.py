@@ -9,6 +9,7 @@ import pandas as pd
 import streamlit as st
 
 from noshow import NOMBRES_LEGIBLES
+from noshow import parametros as parametros_mod
 from noshow.config import RAIZ, cargar_config
 from noshow.datos import estandarizar
 from noshow.modelo import Explicador, SistemaRiesgo
@@ -208,31 +209,18 @@ def datos_del_paciente(historial, id_paciente, fecha_cita):
     }
 
 
-# ------------------------------------------------------------------ parámetros de operación
-@st.cache_resource
-def _cfg_base():
-    return cargar_config(CFG_DATOS)
-
-
+# ------------------------------------------------------------------ parámetros de operación (compartidos con el bot)
 def parametros_base():
-    c = _cfg_base()
-    return {"capacidad": c["niveles"]["alto_percentil"], "sms": c["costos"]["sms"],
-            "whatsapp": c["costos"]["whatsapp"], "llamada": c["costos"]["llamada"],
-            "visita": c["costos"]["visita"], "consulta": c["costos"]["valor_consulta"]}
+    return parametros_mod.base()
 
 
 def parametros():
-    return {**parametros_base(), **st.session_state.get("parametros", {})}
+    return parametros_mod.vigente()
 
 
 def cfg_activa():
-    """Configuración del establecimiento con los parámetros de operación vigentes en la sesión."""
-    cfg, p = copy.deepcopy(_cfg_base()), parametros()
-    cfg["niveles"]["alto_percentil"] = p["capacidad"]
-    cfg["costos"].update({"sms": p["sms"], "whatsapp": p["whatsapp"], "llamada": p["llamada"],
-                          "visita": p["visita"], "valor_consulta": p["consulta"]})
-    return cfg
-
+    """Configuración del establecimiento con los parámetros vigentes (los mismos que usa el servicio del bot)."""
+    return parametros_mod.cfg_activa()
 
 @st.cache_data(show_spinner="Procesando la agenda…")
 def _procesar(contenido, cfg_json):
@@ -248,6 +236,13 @@ def _procesar(contenido, cfg_json):
 def obtener_agenda():
     """Agenda vigente (cargada por el usuario o de demostración) ya priorizada, y la configuración usada."""
     cfg = cfg_activa()
+    if st.session_state.get("fuente_agenda") == "registradas":
+        from noshow.contacto import agenda_db
+        ag = agenda_db.construir(cargar_sistema(), cfg, pd.Timestamp.today(), estados=("agendada", "confirmada", "reprogramacion_solicitada"))
+        if not ag.empty:
+            ag["canal_simulado"] = False
+            return ag, cfg
+        st.session_state["fuente_agenda"] = "archivo"
     cfg_json = json.dumps(cfg, sort_keys=True, default=str)
     try:
         return _procesar(st.session_state.get("agenda_bytes"), cfg_json), cfg
@@ -259,6 +254,8 @@ def obtener_agenda():
 
 
 def origen_agenda():
+    if st.session_state.get("fuente_agenda") == "registradas":
+        return "Citas registradas en el sistema"
     return st.session_state.get("agenda_nombre") or "Agenda de demostración"
 
 
@@ -283,4 +280,5 @@ CONFIG_TABLA = {
     "Riesgo": st.column_config.ProgressColumn("Riesgo", min_value=0, max_value=1, format="percent"),
     "Costo (S/)": st.column_config.NumberColumn("Costo (S/)", format="%.2f"),
 }
+
 

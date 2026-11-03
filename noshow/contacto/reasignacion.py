@@ -1,4 +1,4 @@
-"""Liberación de cupos según las respuestas reales y reasignación a la lista de espera registrada."""
+﻿"""Liberación de cupos según las respuestas reales y reasignación a la lista de espera registrada."""
 from datetime import datetime, time
 
 import pandas as pd
@@ -8,37 +8,47 @@ from .canales import ErrorCanal
 from .despacho import limpiar_id
 
 HORA_CONSULTA = 8     # hora de inicio supuesta de la consulta para medir el plazo de confirmación
+COLUMNAS = ["id_cita", "fecha_cita", "servicio", "motivo"]
 
 
 def cupos_liberables(agenda, horas_limite, referencia):
-    """Citas priorizadas cuyo cupo debe liberarse: el paciente canceló o reprogramó, o no confirmó dentro del plazo."""
+    """Cupos que deben liberarse: el paciente canceló o pidió reprogramar (cualquier riesgo), o una cita priorizada
+    (llamada o riesgo alto) no se confirmó dentro del plazo."""
     contactos = almacen.listar_contactos()
-    if contactos.empty:
-        return pd.DataFrame(columns=["id_cita", "fecha_cita", "servicio", "motivo"])
-    contactos["id_cita"] = contactos["id_cita"].astype(str)
-    prior = agenda[(agenda["prioridad_llamada"]) | (agenda["nivel"] == "alto")]
-    prior = prior[prior["canal_accion"] != "ninguno"]
+    info = {}      # id_cita -> (fecha, servicio, priorizada)
+    for r in agenda.to_dict("records"):
+        info[limpiar_id(r["id_cita"])] = (pd.Timestamp(r["fecha_cita"]).date(), r.get("servicio") or "",
+                                          bool(r.get("prioridad_llamada")) or r.get("nivel") == "alto")
+    respuestas = {}
+    if not contactos.empty:
+        ok = contactos[contactos["estado"].isin(["enviado", "pendiente_manual", "realizado"]) & (contactos["id_cita"] != "")]
+        respuestas = {k: set(s.dropna()) for k, s in ok.groupby("id_cita")["respuesta"]}
+        for id_cita, c in ((i, almacen.obtener_cita(i)) for i in respuestas if i not in info):
+            if c:
+                info[id_cita] = (datetime.fromisoformat(c["fecha_cita"]).date(), c["servicio"] or "", False)
+    for c in almacen.listar_citas().to_dict("records"):          # cancelaciones hechas por el bot sin contacto previo
+        if c["estado"] in ("cancelada", "reprogramacion_solicitada"):
+            info.setdefault(c["id_cita"], (datetime.fromisoformat(c["fecha_cita"]).date(), c["servicio"] or "", False))
+            respuestas.setdefault(c["id_cita"], set()).add("cancelo" if c["estado"] == "cancelada" else "reprogramo")
     filas = []
-    for r in prior.to_dict("records"):
-        id_cita = limpiar_id(r["id_cita"])
-        c = contactos[contactos["id_cita"] == id_cita]
-        c = c[c["estado"].isin(["enviado", "pendiente_manual", "realizado"])]
-        if c.empty:
+    for id_cita, resp in respuestas.items():
+        if id_cita not in info:
             continue
-        resp = set(c["respuesta"].dropna())
+        fecha, servicio, priorizada = info[id_cita]
+        registrada = almacen.obtener_cita(id_cita)
+        servicio = (registrada or {}).get("servicio") or servicio          # la especialidad tal como se registró
         if resp & {"cancelo", "reprogramo"}:
             motivo = "Cancelada o reprogramada por el paciente"
-        elif "confirmo" in resp:
+        elif "confirmo" in resp or not priorizada:
             continue
         else:
-            inicio = datetime.combine(pd.Timestamp(r["fecha_cita"]).date(), time(HORA_CONSULTA))
-            horas = (inicio - referencia).total_seconds() / 3600
+            horas = (datetime.combine(fecha, time(HORA_CONSULTA)) - referencia).total_seconds() / 3600
             if not 0 <= horas <= horas_limite:
                 continue
             motivo = f"Sin confirmación a {horas_limite} h de la cita"
-        filas.append({"id_cita": id_cita, "fecha_cita": pd.Timestamp(r["fecha_cita"]).date(),
-                      "servicio": r.get("servicio") or "", "motivo": motivo})
-    return pd.DataFrame(filas, columns=["id_cita", "fecha_cita", "servicio", "motivo"])
+        if fecha >= referencia.date():                                        # solo cupos de hoy en adelante
+            filas.append({"id_cita": id_cita, "fecha_cita": fecha, "servicio": servicio, "motivo": motivo})
+    return pd.DataFrame(filas, columns=COLUMNAS)
 
 
 def reasignar(agenda, canales, horas_limite, referencia, establecimiento):
@@ -55,7 +65,8 @@ def reasignar(agenda, canales, horas_limite, referencia, establecimiento):
         if espera.empty:
             resultado.append({**cupo, "resultado": "Sin candidato en lista de espera"})
             continue
-        compatibles = espera[(espera["servicio"] == "") | (cupo["servicio"] == "") | (espera["servicio"] == cupo["servicio"])]
+        servicio = str(cupo["servicio"]).upper()
+        compatibles = espera[(espera["servicio"] == "") | (servicio == "") | (espera["servicio"].str.upper() == servicio)]
         if compatibles.empty:
             resultado.append({**cupo, "resultado": "Sin candidato de la misma especialidad"})
             continue
@@ -81,3 +92,5 @@ def reasignar(agenda, canales, horas_limite, referencia, establecimiento):
             res = "Asignada; informar al paciente manualmente"
         resultado.append({**cupo, "id_espera": elegido["id_espera"], "resultado": res})
     return liberables, pd.DataFrame(resultado)
+
+

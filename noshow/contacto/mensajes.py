@@ -1,4 +1,4 @@
-"""Plantillas de mensajes. No incluyen nombres ni datos clínicos: solo fecha, servicio y el establecimiento."""
+﻿"""Plantillas de mensajes. No incluyen nombres ni datos clínicos: solo fecha, servicio y el establecimiento."""
 
 
 def _detalle(fecha, servicio):
@@ -44,6 +44,7 @@ VERIFICADO = ("Número verificado. Recibirá aquí los recordatorios de sus cita
               "Para dejar de recibirlos, escriba /baja.")
 NO_COINCIDE = ("El número compartido no coincide con el registrado en el establecimiento, por lo que no se activaron los avisos. "
                "Acérquese a admisión para actualizar sus datos.")
+FALTA_VERIFICAR = "Para atenderle, primero verifique su número con el botón de abajo (Compartir mi número)."
 CONTACTO_AJENO = "Por seguridad, comparta su propio número con el botón."
 SIN_CODIGO = ("Para recibir recordatorios, use el enlace o el código QR que le entregó el establecimiento de salud al registrarse.")
 CODIGO_INVALIDO = ("El enlace no es válido o ya venció. Solicite uno nuevo en el establecimiento de salud.")
@@ -55,3 +56,4 @@ BAJA = "Listo, no recibirá más recordatorios por este chat."
 GRACIAS = {"c": "Asistencia confirmada. Gracias.", "x": "Cita cancelada. El cupo se ofrecerá a otro paciente.",
            "p": "Solicitud de reprogramación registrada. El establecimiento se comunicará con usted."}
 RESPUESTA = {"c": "confirmo", "x": "cancelo", "p": "reprogramo"}
+

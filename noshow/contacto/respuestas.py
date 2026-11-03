@@ -4,7 +4,7 @@ import re
 import threading
 from collections import Counter
 
-from . import almacen, mensajes
+from . import almacen, conversacion, mensajes
 from .canales import ErrorCanal
 
 _CERROJO = threading.Lock()      # una sola atención a la vez: evita procesar dos veces la misma novedad
@@ -74,7 +74,18 @@ def _mensaje(telegram, m, cuenta):
         telegram.enviar(chat, mensajes.BAJA, teclado=SIN_TECLADO)
         cuenta["bajas"] += 1
     elif texto:
-        telegram.enviar(chat, mensajes.AYUDA)
+        id_pac = almacen.id_por_destino("telegram", chat)
+        if id_pac:      # paciente verificado: conversación libre sobre sus citas
+            r = conversacion.responder(id_pac, texto)
+            telegram.enviar(chat, r["texto"], r["botones"])
+            cuenta["conversaciones"] += 1
+            if r["accion"] == "baja":
+                almacen.desactivar_destinatario(canal="telegram", destino=chat)
+                cuenta["bajas"] += 1
+        elif almacen.id_por_destino("telegram", chat, solo_verificados=False):
+            telegram.enviar(chat, mensajes.FALTA_VERIFICAR, teclado=TECLADO_CONTACTO)
+        else:
+            telegram.enviar(chat, mensajes.SIN_CODIGO)
 
 
 def _callback(telegram, q, cuenta):
@@ -92,6 +103,11 @@ def _callback(telegram, q, cuenta):
         almacen.registrar_respuesta(ident, mensajes.RESPUESTA[valor])
         telegram.responder_callback(q["id"], mensajes.GRACIAS[valor])
         cuenta["respuestas"] += 1
+    elif tipo == "q" and valor in ("s", "n"):
+        r = conversacion.resolver_cancelacion(propietario, ident, valor == "s")
+        telegram.responder_callback(q["id"], "Listo")
+        telegram.enviar(chat, r["texto"])
+        cuenta["respuestas"] += 1
     elif tipo == "a" and valor in ("s", "n"):
         r = almacen.obtener_reasignacion(ident)
         if not r or almacen.paciente_de_espera(r["id_espera"]) != propietario or r["estado"] != "ofrecida":
@@ -99,6 +115,8 @@ def _callback(telegram, q, cuenta):
         if valor == "s":
             almacen.actualizar_reasignacion(ident, "aceptada")
             almacen.actualizar_espera(r["id_espera"], "asignado")
+            original = almacen.obtener_cita(r["id_cita"]) or {}
+            almacen.agendar_cita(propietario, r["fecha_cita"], r["servicio"], original.get("turno", ""))
             telegram.responder_callback(q["id"], "Cupo asignado. El establecimiento le confirmará los detalles.")
         else:
             almacen.actualizar_reasignacion(ident, "rechazada")
@@ -126,4 +144,6 @@ def procesar(telegram, espera=0):
         if novedades:
             almacen.guardar("telegram_offset", siguiente)
         return dict(cuenta)
+
+
 

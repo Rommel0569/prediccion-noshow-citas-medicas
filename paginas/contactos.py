@@ -4,12 +4,16 @@ from datetime import date
 import streamlit as st
 
 from interfaz import comun as c
+from noshow import parametros
 from noshow.contacto import despacho
 from noshow.contacto.canales import cargar_canales
 
 c.encabezado("Agenda y contactos", "Cola de contactos priorizada por riesgo y beneficio esperado")
 
 with st.expander("Origen de los datos", expanded=False):
+    fuente = st.radio("Fuente de la agenda", ["Citas registradas en el sistema", "Archivo CSV o demostración"],
+                      index=0 if st.session_state.get("fuente_agenda") == "registradas" else 1, horizontal=True)
+    st.session_state["fuente_agenda"] = "registradas" if fuente.startswith("Citas") else "archivo"
     st.write("Cargue la agenda de próximas citas en formato estándar (CSV). La plantilla está en "
              "Administración, Incorporar establecimiento. Si no carga ninguna, se usa la agenda de demostración.")
     archivo = st.file_uploader("Agenda de próximas citas (CSV)", type="csv", key="subida_agenda")
@@ -84,7 +88,7 @@ with st.container(border=True):
             c.nota("Destino de los contactos listos: " + ", ".join(f"{k}: {v}" for k, v in por_destino.items()) + ".")
         autoriza = st.checkbox("Confirmo el envío a pacientes con consentimiento registrado", key="autoriza_envio")
         if st.button("Ejecutar contactos", type="primary", disabled=not (autoriza and listos)):
-            resultado, errores = despacho.ejecutar(prog, canales, st.session_state.get("establecimiento", "Consulta externa"), limite)
+            resultado, errores = despacho.ejecutar(prog, canales, parametros.establecimiento(), limite)
             st.success("Contactos ejecutados: " + ", ".join(f"{k.replace('_', ' ')}: {v}" for k, v in resultado.items()) + ".")
             for er in errores[:5]:
                 st.error(er)
@@ -95,4 +99,7 @@ with st.container(border=True):
                              "id_cita": "N.° de cita", "id_paciente": "N.° de historia", "tipo": "Tipo", "destino": "Destino",
                              "estado": "Estado", "fecha_cita": "Fecha de cita", "nivel": "Nivel"}),
                          hide_index=True, use_container_width=True, height=300)
+
+
+
 

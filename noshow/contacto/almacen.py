@@ -20,6 +20,11 @@ CREATE TABLE IF NOT EXISTS destinatarios(
 CREATE TABLE IF NOT EXISTS pacientes(
   id_paciente TEXT PRIMARY KEY, edad INTEGER, zona TEXT, subsidio INTEGER DEFAULT 0, hipertension INTEGER DEFAULT 0,
   diabetes INTEGER DEFAULT 0, telefono TEXT, consentimiento INTEGER DEFAULT 0, creado TEXT);
+CREATE TABLE IF NOT EXISTS citas(
+  id_cita TEXT PRIMARY KEY, id_paciente TEXT NOT NULL, fecha_registro TEXT, fecha_cita TEXT NOT NULL, servicio TEXT,
+  turno TEXT, estado TEXT NOT NULL DEFAULT 'agendada', creado TEXT);
+CREATE TABLE IF NOT EXISTS conversaciones(
+  id_paciente TEXT PRIMARY KEY, estado TEXT, datos TEXT, actualizado TEXT);
 CREATE TABLE IF NOT EXISTS vinculos(
   codigo TEXT PRIMARY KEY, id_paciente TEXT NOT NULL, creado TEXT NOT NULL, vence TEXT NOT NULL, usado INTEGER DEFAULT 0);
 CREATE TABLE IF NOT EXISTS contactos(
@@ -132,6 +137,10 @@ def telefono_de_paciente(id_paciente):
     return r[0]["destino"] if r else None
 
 
+def datos_pacientes():
+    return _df("SELECT * FROM pacientes")
+
+
 def listar_pacientes():
     """Pacientes registrados con el estado de su vinculación a Telegram."""
     return _df("""SELECT p.id_paciente, p.edad, p.zona, p.telefono, p.consentimiento, p.creado,
@@ -168,8 +177,10 @@ def registrar_contacto(id_cita, id_paciente, canal, tipo, fecha_cita, estado, re
 
 
 def contactos_existentes():
-    """Conjunto {(id_cita, tipo)} ya gestionado (no cuenta los envíos con error)."""
-    return {(r["id_cita"], r["tipo"]) for r in _consultar("SELECT id_cita,tipo FROM contactos WHERE estado!='error'")}
+    """Conjunto {(id_cita, tipo)} ya gestionado. Un envío con error se reintenta, hasta 3 veces."""
+    hechos = {(r["id_cita"], r["tipo"]) for r in _consultar("SELECT id_cita,tipo FROM contactos WHERE estado!='error'")}
+    agotados = _consultar("SELECT id_cita,tipo FROM contactos WHERE estado='error' GROUP BY id_cita,tipo HAVING COUNT(*)>=3")
+    return hechos | {(r["id_cita"], r["tipo"]) for r in agotados}
 
 
 def listar_contactos():
@@ -177,7 +188,7 @@ def listar_contactos():
 
 
 def pendientes_manuales():
-    return _df("SELECT id,id_cita,id_paciente,canal,tipo,fecha_cita,creado FROM contactos "
+    return _df("SELECT id,id_cita,id_paciente,canal,tipo,fecha_cita,creado,referencia FROM contactos "
                "WHERE estado='pendiente_manual' ORDER BY fecha_cita, id")
 
 
@@ -186,6 +197,10 @@ def registrar_respuesta(id_cita, respuesta):
     _ejecutar("UPDATE contactos SET respuesta=?, respondido_en=? WHERE id=("
               "SELECT MAX(id) FROM contactos WHERE id_cita=? AND estado IN ('enviado','pendiente_manual','realizado'))",
               (respuesta, ahora(), str(id_cita)))
+    nuevo = {"confirmo": "confirmada", "cancelo": "cancelada", "reprogramo": "reprogramacion_solicitada"}.get(respuesta)
+    if nuevo:
+        _ejecutar("UPDATE citas SET estado=? WHERE id_cita=? AND estado IN ('agendada','confirmada','reprogramacion_solicitada')",
+                  (nuevo, str(id_cita)))
 
 
 def registrar_resultado_manual(id_contacto, respuesta):
@@ -252,4 +267,68 @@ def leer(clave, defecto=None):
 
 def guardar(clave, valor):
     _ejecutar("INSERT OR REPLACE INTO sistema(clave,valor) VALUES(?,?)", (clave, str(valor)))
+
+
+
+# ------------------------------------------------------------------ citas
+ESTADOS_VIGENTES = ("agendada", "confirmada", "reprogramacion_solicitada")
+
+
+def agendar_cita(id_paciente, fecha_cita, servicio="", turno="", fecha_registro=None, id_cita=None):
+    id_cita = id_cita or f"C{datetime.now():%y%m%d%H%M%S}{secrets.randbelow(900) + 100}"
+    _ejecutar("INSERT INTO citas(id_cita,id_paciente,fecha_registro,fecha_cita,servicio,turno,estado,creado) "
+              "VALUES(?,?,?,?,?,?, 'agendada', ?)",
+              (id_cita, str(id_paciente), str(fecha_registro or datetime.now().date()), str(fecha_cita)[:10],
+               servicio or "", turno or "", ahora()))
+    return id_cita
+
+
+def obtener_cita(id_cita):
+    r = _consultar("SELECT * FROM citas WHERE id_cita=?", (str(id_cita),))
+    return r[0] if r else None
+
+
+def citas_de_paciente(id_paciente, desde=None, solo_vigentes=True):
+    sql, args = "SELECT * FROM citas WHERE id_paciente=?", [str(id_paciente)]
+    if desde:
+        sql += " AND fecha_cita>=?"; args.append(str(desde)[:10])
+    if solo_vigentes:
+        sql += " AND estado IN ('agendada','confirmada','reprogramacion_solicitada')"
+    return _consultar(sql + " ORDER BY fecha_cita", tuple(args))
+
+
+def listar_citas():
+    return _df("SELECT * FROM citas ORDER BY fecha_cita DESC, creado DESC")
+
+
+def actualizar_estado_cita(id_cita, estado):
+    _ejecutar("UPDATE citas SET estado=? WHERE id_cita=?", (estado, str(id_cita)))
+
+
+def registrar_asistencia(id_cita, asistio):
+    """Resultado real de la cita: alimenta el historial de inasistencias previas del paciente."""
+    actualizar_estado_cita(id_cita, "atendida" if asistio else "no_asistio")
+
+
+# ------------------------------------------------------------------ estado de la conversación
+def estado_conversacion(id_paciente):
+    r = _consultar("SELECT estado, datos FROM conversaciones WHERE id_paciente=?", (str(id_paciente),))
+    return (r[0]["estado"], r[0]["datos"]) if r else (None, None)
+
+
+def guardar_conversacion(id_paciente, estado, datos=""):
+    _ejecutar("INSERT OR REPLACE INTO conversaciones(id_paciente,estado,datos,actualizado) VALUES(?,?,?,?)",
+              (str(id_paciente), estado, datos, ahora()))
+
+
+def limpiar_conversacion(id_paciente):
+    _ejecutar("DELETE FROM conversaciones WHERE id_paciente=?", (str(id_paciente),))
+
+
+def derivar_a_personal(id_paciente, motivo, id_cita=""):
+    """El paciente pide hablar con una persona: queda como gestión pendiente del personal."""
+    return _ejecutar(
+        "INSERT INTO contactos(id_cita,id_paciente,canal,tipo,fecha_cita,creado,estado,referencia) VALUES(?,?,?,?,?,?,?,?)",
+        (str(id_cita), str(id_paciente), "personal", "consulta", "", ahora(), "pendiente_manual", motivo[:200]))
+
 
