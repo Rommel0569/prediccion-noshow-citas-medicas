@@ -248,19 +248,42 @@ class Explicador:
     """Explicación por caso con SHAP: qué variables subieron o bajaron el riesgo."""
 
     def __init__(self, sistema, fondo):
-        import shap
+        import os
         self.sistema = sistema
         x_fondo = sistema.matriz(fondo).sample(min(200, len(fondo)), random_state=0)
+        self.tipico = x_fondo.median()          # valor "típico" de cada variable, para la explicación liviana
+        self.exp, self.pre = None, None
+        if os.getenv("NOSHOW_SIN_SHAP"):        # servidores con poca memoria: explicación liviana, sin SHAP
+            return
+        try:
+            import shap
+        except ImportError:
+            return
         est = sistema.estimador
         if hasattr(est, "steps"):
             self.exp = shap.LinearExplainer(est.steps[-1][1], est.steps[0][1].transform(x_fondo))
             self.pre = est.steps[0][1]
         else:
             self.exp = shap.TreeExplainer(est, x_fondo)
-            self.pre = None
+
+    def _explicar_liviano(self, x, top):
+        """Aporte de cada variable = cambio del riesgo al reemplazarla por su valor típico (sin SHAP, casi sin memoria)."""
+        base = self.sistema.estimador.predict_proba(x)[:, 1]
+        aportes = {}
+        for col in x.columns:
+            x_t = x.copy()
+            x_t[col] = self.tipico[col]
+            aportes[col] = base - self.sistema.estimador.predict_proba(x_t)[:, 1]
+        filas = []
+        for i in range(len(x)):
+            s = pd.Series({c: aportes[c][i] for c in x.columns}).sort_values(key=np.abs, ascending=False).head(top)
+            filas.append([(k, float(v), float(x.iloc[i][k])) for k, v in s.items()])
+        return filas
 
     def explicar(self, df_caso, top=3):
         x = self.sistema.matriz(df_caso)
+        if self.exp is None:
+            return self._explicar_liviano(x, top)
         xv = self.pre.transform(x) if self.pre is not None else x
         valores = self.exp.shap_values(xv)
         if isinstance(valores, list):

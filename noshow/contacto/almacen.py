@@ -1,11 +1,16 @@
-﻿"""Registro persistente (SQLite) de destinatarios, contactos, lista de espera y reasignaciones.
+﻿"""Registro persistente de destinatarios, pacientes, citas, contactos, lista de espera y reasignaciones.
 
-La base vive en datos/operacion.db (fuera del repositorio) y puede cambiarse con la variable NOSHOW_DB.
+Dos modos, según el entorno:
+  - Local: SQLite en datos/operacion.db (o la ruta de NOSHOW_DB). Es el modo por defecto.
+  - Nube: Postgres, si existe la variable DATABASE_URL (por ejemplo la cadena de conexión de Neon). Así la web y el servicio
+    del bot, que corren por separado, comparten los datos aunque el servidor se reinicie o se duerma.
 Solo guarda identificadores anonimizados y el dato de contacto autorizado por el paciente; nunca nombres.
 """
 import os
+import re
 import secrets
 import sqlite3
+import threading
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -16,7 +21,7 @@ from ..config import RAIZ
 ESQUEMA = """
 CREATE TABLE IF NOT EXISTS destinatarios(
   id_paciente TEXT NOT NULL, canal TEXT NOT NULL, destino TEXT NOT NULL, alta TEXT NOT NULL,
-  activo INTEGER NOT NULL DEFAULT 1, PRIMARY KEY(id_paciente, canal));
+  activo INTEGER NOT NULL DEFAULT 1, verificado INTEGER NOT NULL DEFAULT 1, PRIMARY KEY(id_paciente, canal));
 CREATE TABLE IF NOT EXISTS pacientes(
   id_paciente TEXT PRIMARY KEY, edad INTEGER, zona TEXT, subsidio INTEGER DEFAULT 0, hipertension INTEGER DEFAULT 0,
   diabetes INTEGER DEFAULT 0, telefono TEXT, consentimiento INTEGER DEFAULT 0, creado TEXT);
@@ -38,6 +43,17 @@ CREATE TABLE IF NOT EXISTS reasignaciones(
 CREATE TABLE IF NOT EXISTS sistema(clave TEXT PRIMARY KEY, valor TEXT);
 """
 
+# clave primaria de las tablas donde se usa "insertar o reemplazar" (en Postgres: INSERT ... ON CONFLICT DO UPDATE)
+CLAVES = {"destinatarios": ("id_paciente", "canal"), "pacientes": ("id_paciente",), "conversaciones": ("id_paciente",),
+          "sistema": ("clave",)}
+CON_ID_AUTOMATICO = ("contactos", "reasignaciones")
+_LOCAL = threading.local()
+_ESQUEMA_LISTO = set()
+
+
+def usa_postgres():
+    return bool(os.getenv("DATABASE_URL"))
+
 
 def ruta_db():
     return Path(os.getenv("NOSHOW_DB") or RAIZ / "datos" / "operacion.db")
@@ -47,7 +63,8 @@ def ahora():
     return datetime.now().isoformat(timespec="seconds")
 
 
-def _con():
+# ------------------------------------------------------------------ acceso a datos
+def _sqlite():
     ruta = ruta_db()
     ruta.parent.mkdir(parents=True, exist_ok=True)
     con = sqlite3.connect(ruta)
@@ -60,8 +77,51 @@ def _con():
     return con
 
 
+def _postgres():
+    """Conexión Postgres reutilizada por hilo (abrir una por consulta sería lento en la nube)."""
+    import psycopg
+    from psycopg.rows import dict_row
+    url = os.environ["DATABASE_URL"]
+    con = getattr(_LOCAL, "con", None)
+    if con is None or con.closed:
+        con = psycopg.connect(url, autocommit=True, row_factory=dict_row, connect_timeout=15,
+                              prepare_threshold=None)     # compatible con el pooler de Neon (pgbouncer)
+        _LOCAL.con = con
+        if url not in _ESQUEMA_LISTO:
+            for sentencia in ESQUEMA.replace("INTEGER PRIMARY KEY AUTOINCREMENT", "SERIAL PRIMARY KEY").split(";"):
+                if sentencia.strip():
+                    con.execute(sentencia)
+            _ESQUEMA_LISTO.add(url)
+    return con
+
+
+def _a_postgres(sql):
+    """Traduce el SQL (estilo SQLite) a Postgres: marcadores, 'insertar o reemplazar' e id automático."""
+    m = re.match(r"\s*INSERT OR REPLACE INTO (\w+)\(([^)]*)\)\s*VALUES(.*)", sql, re.S)
+    if m:
+        tabla, cols = m.group(1), [c.strip() for c in m.group(2).split(",")]
+        claves = CLAVES[tabla]
+        sets = ", ".join(f"{c}=EXCLUDED.{c}" for c in cols if c not in claves)
+        sql = (f"INSERT INTO {tabla}({', '.join(cols)}) VALUES{m.group(3)} "
+               f"ON CONFLICT ({', '.join(claves)}) DO UPDATE SET {sets}")
+    elif re.match(r"\s*INSERT INTO (%s)\b" % "|".join(CON_ID_AUTOMATICO), sql):
+        sql += " RETURNING id"
+    return sql.replace("?", "%s")
+
+
 def _ejecutar(sql, args=()):
-    con = _con()
+    if usa_postgres():
+        import psycopg
+        for intento in (1, 2):              # una conexión inactiva puede haberse cerrado: se reabre y se reintenta
+            try:
+                cur = _postgres().execute(_a_postgres(sql), args)
+                fila = cur.fetchone() if cur.description else None
+                return fila["id"] if fila else None
+            except (psycopg.OperationalError, psycopg.InterfaceError):
+                _LOCAL.con = None
+                if intento == 2:
+                    raise
+    con = _sqlite()
     try:
         with con:
             return con.execute(sql, args).lastrowid
@@ -70,7 +130,16 @@ def _ejecutar(sql, args=()):
 
 
 def _consultar(sql, args=()):
-    con = _con()
+    if usa_postgres():
+        import psycopg
+        for intento in (1, 2):
+            try:
+                return list(_postgres().execute(_a_postgres(sql), args).fetchall())
+            except (psycopg.OperationalError, psycopg.InterfaceError):
+                _LOCAL.con = None
+                if intento == 2:
+                    raise
+    con = _sqlite()
     try:
         return [dict(r) for r in con.execute(sql, args).fetchall()]
     finally:
@@ -330,5 +399,6 @@ def derivar_a_personal(id_paciente, motivo, id_cita=""):
     return _ejecutar(
         "INSERT INTO contactos(id_cita,id_paciente,canal,tipo,fecha_cita,creado,estado,referencia) VALUES(?,?,?,?,?,?,?,?)",
         (str(id_cita), str(id_paciente), "personal", "consulta", "", ahora(), "pendiente_manual", motivo[:200]))
+
 
 

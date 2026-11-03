@@ -1,0 +1,29 @@
+# Plano de despliegue gratuito en Render (web + bot en un solo servicio). La base de datos está en Neon (Postgres gratis).
+# Guía paso a paso: DESPLIEGUE.md
+services:
+  - type: web
+    name: gestion-inasistencias
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements-nube.txt
+    startCommand: python iniciar_nube.py
+    healthCheckPath: /_stcore/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: NOSHOW_SIN_SHAP          # explicación liviana: el plan gratis tiene solo 512 MB de memoria
+        value: "1"
+      - key: CICLO_SEGUNDOS
+        value: "300"
+      - key: DATABASE_URL             # cadena de conexión de Neon
+        sync: false
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: APP_PASSWORD             # contraseña de acceso a la web
+        sync: false
+      - key: TWILIO_ACCOUNT_SID       # opcional
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_FROM
+        sync: false

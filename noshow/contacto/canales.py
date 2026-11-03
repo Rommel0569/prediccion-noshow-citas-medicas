@@ -13,6 +13,15 @@ from ..config import RAIZ
 TIEMPO_ESPERA = 15
 
 
+def _sin_secretos(error, *secretos):
+    """Texto del error sin credenciales (las URL de Telegram contienen el token)."""
+    texto = str(error)
+    for s in secretos:
+        if s:
+            texto = texto.replace(s, "***")
+    return texto
+
+
 class ErrorCanal(Exception):
     """Fallo al usar un canal (red, credenciales o rechazo del proveedor)."""
 
@@ -29,7 +38,7 @@ class Telegram:
                               timeout=TIEMPO_ESPERA + datos.get("timeout", 0))
             j = r.json()
         except (requests.RequestException, ValueError) as e:
-            raise ErrorCanal(f"Telegram: {e}") from e
+            raise ErrorCanal(f"Telegram: {_sin_secretos(e, self.token)}") from None      # el token nunca debe llegar a los registros
         if not j.get("ok"):
             raise ErrorCanal(f"Telegram: {j.get('description', r.status_code)}")
         return j["result"]
@@ -74,7 +83,7 @@ class Twilio:
                               auth=(self.sid, self.token), timeout=TIEMPO_ESPERA)
             j = r.json()
         except (requests.RequestException, ValueError) as e:
-            raise ErrorCanal(f"Twilio: {e}") from e
+            raise ErrorCanal(f"Twilio: {_sin_secretos(e, self.token, self.sid)}") from None
         if r.status_code >= 300:
             raise ErrorCanal(f"Twilio: {j.get('message', r.status_code)}")
         return j["sid"]
@@ -105,4 +114,5 @@ def cargar_canales():
         "telegram": Telegram(token, base) if token else None,
         "twilio": Twilio(sid, auth, desde, base_tw) if sid and auth and desde else None,
     }
+
 

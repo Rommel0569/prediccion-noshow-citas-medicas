@@ -1,0 +1,10 @@
+﻿pandas>=2.2
+numpy>=1.26
+scikit-learn>=1.5
+pyyaml>=6.0
+joblib>=1.4
+matplotlib>=3.8
+streamlit>=1.40
+requests>=2.31
+segno>=1.6
+psycopg[binary]>=3.1

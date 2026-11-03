@@ -215,3 +215,7 @@ con `/revoke` en BotFather.
 
 ### Pruebas automáticas (sin red ni credenciales; usan servidores de prueba de Telegram y Twilio)
 `python probar_contacto.py` (31) · `python probar_conversacion.py` (26) · `python probar_autonomia.py` (19) · `python probar_casos.py` (11)
+
+### Despliegue gratuito (enlace web que no se duerme)
+La aplicación puede usar Postgres en la nube definiendo `DATABASE_URL` (si no existe, usa SQLite local). `render.yaml` y `DESPLIEGUE.md` explican cómo
+publicarla gratis con **Neon** (base de datos), **Render** (web + bot) y **UptimeRobot** (ping y alertas) en unos 15 minutos.
