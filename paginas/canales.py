@@ -1,4 +1,4 @@
-"""Canales de contacto: conexión, vinculación de pacientes y mensaje de prueba."""
+﻿"""Canales de contacto: conexión, vinculación de pacientes y mensaje de prueba."""
 import pandas as pd
 import streamlit as st
 
@@ -43,40 +43,10 @@ with st.expander("Cómo configurar los canales", expanded=not any(canales.values
 """)
     st.code("telegram:\n  token: \"123456:ABC...\"\ntwilio:\n  account_sid: \"AC...\"\n  auth_token: \"...\"\n  desde: \"+1...\"", language="yaml")
 
-c.seccion("Vincular un paciente a Telegram")
-st.markdown("El establecimiento genera un enlace de un solo uso y se lo entrega al paciente al registrar su cita. Al abrirlo y "
-            "pulsar *Iniciar*, el paciente queda registrado y acepta recibir los recordatorios. Puede salir con `/baja`.")
-with st.container(border=True):
-    f1, f2 = st.columns([3, 1])
-    id_pac = f1.text_input("N.° de historia del paciente (anonimizado)", key="vinc_id")
-    f2.markdown("<div style='height:1.9rem'></div>", unsafe_allow_html=True)
-    if f2.button("Generar enlace", use_container_width=True, disabled=not (canales["telegram"] and id_pac.strip())):
-        try:
-            usuario = canales["telegram"].info()["username"]
-            st.session_state["enlace"] = f"https://t.me/{usuario}?start={almacen.crear_vinculo(id_pac.strip())}"
-        except ErrorCanal as e:
-            st.error(str(e))
-    if st.session_state.get("enlace"):
-        st.code(st.session_state["enlace"], language=None)
-        c.nota("Válido por 7 días y de un solo uso.")
-    if not canales["telegram"]:
-        c.nota("Configure primero el token de Telegram.")
-
-c.seccion("Teléfonos autorizados (SMS y llamadas)")
-with st.container(border=True):
-    t1, t2 = st.columns(2)
-    id_tel = t1.text_input("N.° de historia del paciente (anonimizado)", key="tel_id")
-    tel = t2.text_input("Teléfono en formato internacional", placeholder="+51999999999", key="tel_num")
-    ok = st.checkbox("El paciente autorizó recibir avisos de sus citas por este teléfono", key="tel_ok")
-    valido = tel.startswith("+") and tel[1:].isdigit() and len(tel) >= 10
-    if st.button("Registrar teléfono", disabled=not (id_tel.strip() and valido and ok)):
-        almacen.registrar_destinatario(id_tel.strip(), "telefono", tel)
-        st.success("Teléfono registrado.")
-    if RUTA_EQUIPO.exists():
-        if st.button("Cargar los números del equipo (config/equipo.local.csv)"):
-            st.success(f"{cargar_equipo()} números cargados.")
-    else:
-        c.nota("También puede cargar varios números a la vez con config/equipo.local.csv (archivo local, fuera del repositorio).")
+c.seccion("Vinculación de pacientes")
+st.markdown("El registro del paciente y su vinculación a Telegram (QR o enlace, con verificación automática del teléfono) "
+            "se hacen en **Admisión de pacientes**.")
+st.page_link("paginas/admision.py", label="Ir a Admisión de pacientes", icon=":material/arrow_forward:")
 
 c.seccion("Pacientes autorizados")
 dest = almacen.listar_destinatarios()
@@ -84,7 +54,7 @@ if dest.empty:
     st.write("Todavía no hay pacientes autorizados.")
 else:
     vista = dest.assign(canal=dest["canal"].map({"telegram": "Telegram", "telefono": "Teléfono"}),
-                        activo=dest["activo"].map({1: "Activo", 0: "Dado de baja"}),
+                        activo=dest.apply(lambda r: "Dado de baja" if r["activo"] == 0 else ("Verificado" if r["verificado"] == 1 else "Pendiente de verificación"), axis=1),
                         destino=dest.apply(lambda r: r["destino"][:3] + "•" * max(len(r["destino"]) - 5, 0) + r["destino"][-2:], axis=1))
     st.dataframe(vista.rename(columns={"id_paciente": "N.° de historia", "canal": "Canal", "destino": "Destino (oculto)",
                                        "alta": "Fecha de alta", "activo": "Estado"}),
@@ -101,3 +71,4 @@ if canales["telegram"] and not con_tg.empty:
             st.success("Mensaje enviado.")
         except ErrorCanal as e:
             st.error(str(e))
+

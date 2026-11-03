@@ -1,4 +1,4 @@
-"""Utilidades compartidas: carga del modelo, parámetros de operación, agenda procesada y componentes visuales."""
+﻿"""Utilidades compartidas: carga del modelo, parámetros de operación, agenda procesada y componentes visuales."""
 import copy
 import io
 import json
@@ -179,10 +179,24 @@ def ejemplos_pacientes(ruta=MODELO):
     return g.sort_values("sum", ascending=False).index[0], g[(g["size"] >= 3) & (g["sum"] == 0)].index[0]
 
 
+def qr_png(texto):
+    """Código QR (PNG) de un enlace, para mostrar en admisión."""
+    import segno
+    buf = io.BytesIO()
+    segno.make(texto, error="m").save(buf, kind="png", scale=8, border=2, dark="#1B2733")
+    return buf.getvalue()
+
+
 def datos_del_paciente(historial, id_paciente, fecha_cita):
     """Lo que admisión ya guarda del paciente: así no hay que digitarlo al programar la cita."""
     h = historial[historial["id_paciente"] == str(id_paciente).strip()]
     if h.empty:
+        from noshow.contacto import almacen
+        p = almacen.obtener_paciente(str(id_paciente).strip())
+        if p:       # paciente registrado en admisión, sin historial de citas
+            return {"edad": int(p["edad"]), "zona": p["zona"], "subsidio": bool(p["subsidio"]),
+                    "hipertension": bool(p["hipertension"]), "diabetes": bool(p["diabetes"]),
+                    "faltas_previas": 0, "citas_previas": 0, "ultima_cita": None}
         return None
     antes = h[h["fecha_cita"] < pd.Timestamp(fecha_cita)]
     ult = h.sort_values("fecha_cita").iloc[-1]
@@ -269,3 +283,4 @@ CONFIG_TABLA = {
     "Riesgo": st.column_config.ProgressColumn("Riesgo", min_value=0, max_value=1, format="percent"),
     "Costo (S/)": st.column_config.NumberColumn("Costo (S/)", format="%.2f"),
 }
+

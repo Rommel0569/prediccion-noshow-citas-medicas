@@ -65,13 +65,42 @@ agenda = pd.DataFrame([
     {"id_cita": "103", "id_paciente": "P4", "fecha_cita": hoy + pd.Timedelta(days=30), "nivel": "medio", "canal_accion": "whatsapp", "prioridad_llamada": False, "servicio": "Cardiología"},
 ])
 
-# 1. Vinculación con código de un solo uso
+def contacto(chat, telefono, user_id=None):
+    n = len(COLA) + 1
+    COLA.append({"update_id": n, "message": {"chat": {"id": chat}, "from": {"id": chat},
+                                              "contact": {"phone_number": telefono, "user_id": user_id or chat}}})
+
+
+# 1. Admisión: el paciente se registra primero y luego vincula su Telegram con el código
+almacen.registrar_paciente("P1", 40, "", 0, 0, 0, "+51930693548", 1)
+almacen.registrar_paciente("P2", 30, "", 0, 0, 0, "+51 911 111 111", 1)
 cod1, cod2 = almacen.crear_vinculo("P1"), almacen.crear_vinculo("P2")
 escribir(555, f"/start {cod1}"); escribir(556, f"/start {cod2}"); escribir(777, "/start codigo-falso")
 r = respuestas.procesar(tg)
-verificar("vinculación con código válido (2 pacientes)", r.get("vinculados") == 2)
-verificar("código inválido no registra a nadie", almacen.id_por_destino("telegram", 777) is None)
+verificar("el código vincula el chat al registro y pide verificar el teléfono", r.get("pendientes_verificacion") == 2)
+verificar("el bot pide compartir el número (botón de contacto)", any("request_contact" in json.dumps(m) for m in ENVIADOS))
+verificar("código inválido no registra a nadie", almacen.id_por_destino("telegram", 777, solo_verificados=False) is None)
 verificar("el código es de un solo uso", almacen.consumir_vinculo(cod1) is None)
+verificar("sin verificar no se envían avisos", despacho.plan(pd.DataFrame([{
+    "id_cita": "100", "id_paciente": "P1", "fecha_cita": pd.Timestamp("2026-11-11"), "nivel": "alto", "canal_accion": "whatsapp"}]),
+    canales, pd.Timestamp("2026-11-10"))["estado"].iloc[0] == "Sin destino")
+
+contacto(555, "51930693548")                        # P1 comparte su número real: coincide (sin prefijo + ni espacios)
+contacto(556, "51999999999", user_id=999)           # P2 intenta compartir el contacto de otra persona
+contacto(556, "51999999999")                        # P2 comparte un número distinto al registrado
+r = respuestas.procesar(tg)
+verificar("el número que coincide queda verificado", almacen.id_por_destino("telegram", 555) == "P1")
+verificar("no se acepta el contacto de otra persona", any("propio número" in m["text"] for m in ENVIADOS))
+verificar("el número distinto desactiva la vinculación", r.get("no_coincide") == 1 and almacen.id_por_destino("telegram", 556, False) is None)
+escribir(556, f"/start {almacen.crear_vinculo('P2')}"); contacto(556, "+51 911 111 111")
+respuestas.procesar(tg)
+verificar("el paciente corrige y se verifica con su número", almacen.id_por_destino("telegram", 556) == "P2")
+almacen.registrar_paciente("P6", 22, "", 0, 0, 0, "+51 922 222 222", 1)      # el mismo chat se vincula a otro paciente
+escribir(556, f"/start {almacen.crear_vinculo('P6')}"); respuestas.procesar(tg)
+verificar("un chat corresponde a un solo paciente", almacen.id_por_destino("telegram", 556, False) == "P6"
+          and almacen.id_por_destino("telegram", 556) is None)
+escribir(556, f"/start {almacen.crear_vinculo('P2')}"); contacto(556, "+51 911 111 111"); respuestas.procesar(tg)
+ENVIADOS.clear()
 
 # 2. Plan y envío
 p = despacho.plan(agenda, canales, hoy)
@@ -118,7 +147,22 @@ respuestas.procesar(tg)
 verificar("la oferta aceptada queda registrada", almacen.obtener_reasignacion(rid)["estado"] == "aceptada")
 verificar("no se vuelve a ofrecer un cupo ya asignado", "E0001" not in set(reasignacion.reasignar(agenda, canales, 24, ref, "H")[1].get("id_espera", [])))
 
-# 6. Errores del canal
+# 6. El bot atiende solo, sin que nadie ejecute nada
+import time                                                              # noqa: E402
+from noshow.contacto import servicio                                     # noqa: E402
+almacen.registrar_paciente("P7", 50, "", 0, 0, 0, "", 1)
+verificar("sin proceso activo, el servicio no figura como activo", not servicio.activo())
+hilo, detener = servicio.iniciar_en_segundo_plano(tg)
+escribir(1234, f"/start {almacen.crear_vinculo('P7')}")                  # un paciente nuevo escribe al bot
+for _ in range(30):
+    if almacen.id_por_destino("telegram", 1234) == "P7":
+        break
+    time.sleep(0.2)
+verificar("el bot de fondo registra al paciente sin intervención", almacen.id_por_destino("telegram", 1234) == "P7")
+verificar("el servicio queda activo y evita un segundo proceso", servicio.activo() and servicio.iniciar_en_segundo_plano(tg) is None)
+detener.set()
+
+# 7. Errores del canal
 try:
     Telegram("TOKEN", "http://127.0.0.1:9").info()
     verificar("un canal caído produce ErrorCanal", False)

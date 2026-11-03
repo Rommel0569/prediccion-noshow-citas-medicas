@@ -1,9 +1,9 @@
-"""Registro de contactos: seguimiento de envíos, respuestas y llamadas pendientes."""
+﻿"""Registro de contactos: seguimiento de envíos, respuestas y llamadas pendientes."""
 import pandas as pd
 import streamlit as st
 
 from interfaz import comun as c
-from noshow.contacto import almacen, respuestas
+from noshow.contacto import almacen, respuestas, servicio
 from noshow.contacto.canales import ErrorCanal, cargar_canales
 from noshow.contacto.despacho import ETIQUETA_TIPO
 
@@ -18,8 +18,8 @@ c.encabezado("Registro de contactos", "Seguimiento de envíos, respuestas y gest
 
 @st.fragment(run_every="10s")
 def seguimiento():
-    """Se actualiza solo: consulta las respuestas de Telegram y refresca los indicadores."""
-    if canales["telegram"]:
+    """Se actualiza solo. Las respuestas las atiende el bot de fondo; si no estuviera activo, se consultan aquí."""
+    if canales["telegram"] and not servicio.activo():
         try:
             nuevas = respuestas.procesar(canales["telegram"])
             if nuevas:
@@ -39,7 +39,7 @@ def seguimiento():
 
 
 seguimiento()
-c.nota("Las respuestas de Telegram se consultan automáticamente cada 10 segundos mientras esta página está abierta.")
+c.nota("Las respuestas de los pacientes las atiende el bot de forma continua; esta vista se actualiza cada 10 segundos.")
 
 c.seccion("Llamadas y visitas pendientes")
 pend = almacen.pendientes_manuales()
@@ -88,3 +88,4 @@ else:
     st.dataframe(vista, hide_index=True, use_container_width=True, height=380)
     st.download_button("Exportar a CSV", vista.to_csv(index=False).encode("utf-8-sig"), "registro_contactos.csv",
                        "text/csv", icon=":material/download:")
+

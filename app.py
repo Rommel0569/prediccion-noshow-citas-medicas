@@ -1,4 +1,4 @@
-"""Gestión de inasistencias a citas médicas: aplicación web (Streamlit).
+﻿"""Gestión de inasistencias a citas médicas: aplicación web (Streamlit).
 
 Ejecutar:  streamlit run app.py
 """
@@ -7,6 +7,7 @@ from pathlib import Path
 import streamlit as st
 
 from interfaz import comun as c
+from noshow.contacto import servicio
 from noshow.contacto.canales import cargar_canales
 from noshow.contacto.equipo import cargar_equipo
 
@@ -24,11 +25,20 @@ def _cargar_equipo_una_vez():
     return cargar_equipo()      # teléfonos del equipo desde config/equipo.local.csv, si el archivo existe
 
 
+@st.cache_resource
+def _iniciar_bot():
+    """Atiende al bot de Telegram en segundo plano mientras la aplicación esté encendida."""
+    tg = cargar_canales()["telegram"]
+    return servicio.iniciar_en_segundo_plano(tg) if tg else None
+
+
 _cargar_equipo_una_vez()
+_iniciar_bot()
 
 navegacion = st.navigation({
     "Operación": [
         st.Page("paginas/panel.py", title="Panel de control", icon=":material/space_dashboard:", default=True),
+        st.Page("paginas/admision.py", title="Admisión de pacientes", icon=":material/how_to_reg:"),
         st.Page("paginas/programar.py", title="Programación de citas", icon=":material/edit_calendar:"),
         st.Page("paginas/contactos.py", title="Agenda y contactos", icon=":material/contact_phone:"),
         st.Page("paginas/registro.py", title="Registro de contactos", icon=":material/forum:"),
@@ -53,7 +63,8 @@ with st.sidebar:
     st.markdown(
         f'<div class="nota"><b>Modelo</b>: {info["modelo_elegido"]}<br>'
         f'<b>AUC en prueba</b>: {info["prueba"][info["modelo_elegido"]]["auc"]:.3f}<br>'
-        f'<b>Canales</b>: {", ".join(activos) if activos else "sin configurar"}</div>',
+        f'<b>Canales</b>: {", ".join(activos) if activos else "sin configurar"}<br>'
+        f'<b>Bot</b>: {"atendiendo" if servicio.activo() else "detenido"}</div>',
         unsafe_allow_html=True)
 
 navegacion.run()

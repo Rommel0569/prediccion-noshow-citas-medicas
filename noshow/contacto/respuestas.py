@@ -1,26 +1,80 @@
-"""Recepción de las respuestas de los pacientes (Telegram): vinculación, baja, confirmaciones y ofertas de cupo."""
+﻿"""Atención del bot: vinculación con el registro del paciente, verificación de su teléfono, bajas, confirmaciones
+y respuestas a ofertas de cupo."""
+import re
+import threading
+from collections import Counter
+
 from . import almacen, mensajes
 from .canales import ErrorCanal
+
+_CERROJO = threading.Lock()      # una sola atención a la vez: evita procesar dos veces la misma novedad
+TECLADO_CONTACTO = {"keyboard": [[{"text": mensajes.BOTON_CONTACTO, "request_contact": True}]],
+                    "resize_keyboard": True, "one_time_keyboard": True}
+SIN_TECLADO = {"remove_keyboard": True}
+
+
+def _digitos(x):
+    return re.sub(r"\D", "", str(x or ""))
+
+
+def mismo_telefono(a, b):
+    """Compara teléfonos por sus últimos 9 dígitos (ignora prefijo de país y formato)."""
+    a, b = _digitos(a), _digitos(b)
+    return len(a) >= 9 and len(b) >= 9 and a[-9:] == b[-9:]
+
+
+def _vincular(telegram, chat, codigo, cuenta):
+    id_pac = almacen.consumir_vinculo(codigo)
+    if id_pac is None:
+        telegram.enviar(chat, mensajes.CODIGO_INVALIDO)
+        return
+    almacen.desactivar_destinatario(canal="telegram", destino=chat)      # un chat corresponde a un solo paciente
+    tel = almacen.telefono_de_paciente(id_pac)
+    if tel:     # el establecimiento ya tiene su teléfono: se verifica antes de activar los avisos
+        almacen.registrar_destinatario(id_pac, "telegram", chat, verificado=0)
+        telegram.enviar(chat, mensajes.VERIFICAR.format(fin=_digitos(tel)[-3:]), teclado=TECLADO_CONTACTO)
+        cuenta["pendientes_verificacion"] += 1
+    else:
+        almacen.registrar_destinatario(id_pac, "telegram", chat, verificado=1)
+        telegram.enviar(chat, mensajes.BIENVENIDA)
+        cuenta["vinculados"] += 1
+
+
+def _contacto(telegram, m, cuenta):
+    chat, c = m["chat"]["id"], m["contact"]
+    if c.get("user_id") != (m.get("from") or {}).get("id"):
+        telegram.enviar(chat, mensajes.CONTACTO_AJENO, teclado=TECLADO_CONTACTO)
+        return
+    id_pac = almacen.id_por_destino("telegram", chat, solo_verificados=False)
+    if not id_pac:
+        telegram.enviar(chat, mensajes.SIN_CODIGO, teclado=SIN_TECLADO)
+        return
+    if mismo_telefono(c.get("phone_number"), almacen.telefono_de_paciente(id_pac)):
+        almacen.verificar_destinatario(id_pac, "telegram")
+        telegram.enviar(chat, mensajes.VERIFICADO, teclado=SIN_TECLADO)
+        cuenta["vinculados"] += 1
+    else:
+        almacen.desactivar_destinatario(id_paciente=id_pac, canal="telegram")
+        telegram.enviar(chat, mensajes.NO_COINCIDE, teclado=SIN_TECLADO)
+        cuenta["no_coincide"] += 1
 
 
 def _mensaje(telegram, m, cuenta):
     chat, texto = m["chat"]["id"], (m.get("text") or "").strip()
-    if texto.startswith("/start"):
+    if m.get("contact"):
+        _contacto(telegram, m, cuenta)
+    elif texto.startswith("/start"):
         partes = texto.split(maxsplit=1)
         if len(partes) < 2:
             telegram.enviar(chat, mensajes.SIN_CODIGO)
-            return
-        id_pac = almacen.consumir_vinculo(partes[1].strip())
-        if id_pac is None:
-            telegram.enviar(chat, mensajes.CODIGO_INVALIDO)
-            return
-        almacen.registrar_destinatario(id_pac, "telegram", chat)
-        telegram.enviar(chat, mensajes.BIENVENIDA)
-        cuenta["vinculados"] += 1
+        else:
+            _vincular(telegram, chat, partes[1].strip(), cuenta)
     elif texto.startswith("/baja"):
         almacen.desactivar_destinatario(canal="telegram", destino=chat)
-        telegram.enviar(chat, mensajes.BAJA)
+        telegram.enviar(chat, mensajes.BAJA, teclado=SIN_TECLADO)
         cuenta["bajas"] += 1
+    elif texto:
+        telegram.enviar(chat, mensajes.AYUDA)
 
 
 def _callback(telegram, q, cuenta):
@@ -53,22 +107,23 @@ def _callback(telegram, q, cuenta):
         cuenta["ofertas_respondidas"] += 1
 
 
-def procesar(telegram):
-    """Lee las novedades del bot y las registra. Devuelve un contador de lo procesado."""
-    from collections import Counter
-    cuenta = Counter()
-    offset = almacen.leer("telegram_offset")
-    novedades = telegram.actualizaciones(int(offset) if offset else None)
-    siguiente = int(offset) if offset else 0
-    for u in novedades:
-        siguiente = max(siguiente, u["update_id"] + 1)
-        try:
-            if "message" in u:
-                _mensaje(telegram, u["message"], cuenta)
-            elif "callback_query" in u:
-                _callback(telegram, u["callback_query"], cuenta)
-        except ErrorCanal:
-            cuenta["errores"] += 1
-    if novedades:
-        almacen.guardar("telegram_offset", siguiente)
-    return dict(cuenta)
+def procesar(telegram, espera=0):
+    """Lee las novedades del bot y las atiende. Con `espera` > 0 aguarda hasta ese número de segundos a que llegue algo."""
+    with _CERROJO:
+        cuenta = Counter()
+        offset = almacen.leer("telegram_offset")
+        novedades = telegram.actualizaciones(int(offset) if offset else None, espera)
+        siguiente = int(offset) if offset else 0
+        for u in novedades:
+            siguiente = max(siguiente, u["update_id"] + 1)
+            try:
+                if "message" in u:
+                    _mensaje(telegram, u["message"], cuenta)
+                elif "callback_query" in u:
+                    _callback(telegram, u["callback_query"], cuenta)
+            except ErrorCanal:
+                cuenta["errores"] += 1
+        if novedades:
+            almacen.guardar("telegram_offset", siguiente)
+        return dict(cuenta)
+

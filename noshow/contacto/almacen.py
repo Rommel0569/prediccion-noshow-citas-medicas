@@ -1,4 +1,4 @@
-"""Registro persistente (SQLite) de destinatarios, contactos, lista de espera y reasignaciones.
+﻿"""Registro persistente (SQLite) de destinatarios, contactos, lista de espera y reasignaciones.
 
 La base vive en datos/operacion.db (fuera del repositorio) y puede cambiarse con la variable NOSHOW_DB.
 Solo guarda identificadores anonimizados y el dato de contacto autorizado por el paciente; nunca nombres.
@@ -17,6 +17,9 @@ ESQUEMA = """
 CREATE TABLE IF NOT EXISTS destinatarios(
   id_paciente TEXT NOT NULL, canal TEXT NOT NULL, destino TEXT NOT NULL, alta TEXT NOT NULL,
   activo INTEGER NOT NULL DEFAULT 1, PRIMARY KEY(id_paciente, canal));
+CREATE TABLE IF NOT EXISTS pacientes(
+  id_paciente TEXT PRIMARY KEY, edad INTEGER, zona TEXT, subsidio INTEGER DEFAULT 0, hipertension INTEGER DEFAULT 0,
+  diabetes INTEGER DEFAULT 0, telefono TEXT, consentimiento INTEGER DEFAULT 0, creado TEXT);
 CREATE TABLE IF NOT EXISTS vinculos(
   codigo TEXT PRIMARY KEY, id_paciente TEXT NOT NULL, creado TEXT NOT NULL, vence TEXT NOT NULL, usado INTEGER DEFAULT 0);
 CREATE TABLE IF NOT EXISTS contactos(
@@ -45,6 +48,10 @@ def _con():
     con = sqlite3.connect(ruta)
     con.row_factory = sqlite3.Row
     con.executescript(ESQUEMA)
+    columnas = {f["name"] for f in con.execute("PRAGMA table_info(destinatarios)").fetchall()}
+    if "verificado" not in columnas:        # migración de bases creadas antes de la verificación de teléfono
+        con.execute("ALTER TABLE destinatarios ADD COLUMN verificado INTEGER NOT NULL DEFAULT 1")
+        con.commit()
     return con
 
 
@@ -70,9 +77,13 @@ def _df(sql, args=()):
 
 
 # ------------------------------------------------------------------ destinatarios y vínculos
-def registrar_destinatario(id_paciente, canal, destino):
-    _ejecutar("INSERT OR REPLACE INTO destinatarios(id_paciente,canal,destino,alta,activo) VALUES(?,?,?,?,1)",
-              (str(id_paciente), canal, str(destino), ahora()))
+def registrar_destinatario(id_paciente, canal, destino, verificado=1):
+    _ejecutar("INSERT OR REPLACE INTO destinatarios(id_paciente,canal,destino,alta,activo,verificado) VALUES(?,?,?,?,1,?)",
+              (str(id_paciente), canal, str(destino), ahora(), int(verificado)))
+
+
+def verificar_destinatario(id_paciente, canal):
+    _ejecutar("UPDATE destinatarios SET verificado=1 WHERE id_paciente=? AND canal=?", (str(id_paciente), canal))
 
 
 def desactivar_destinatario(id_paciente=None, canal=None, destino=None):
@@ -85,18 +96,50 @@ def desactivar_destinatario(id_paciente=None, canal=None, destino=None):
 
 
 def destinatarios_activos():
-    """{(id_paciente, canal): destino} de quienes autorizaron el contacto."""
+    """{(id_paciente, canal): destino} de quienes autorizaron el contacto y tienen el canal verificado."""
     return {(r["id_paciente"], r["canal"]): r["destino"]
-            for r in _consultar("SELECT * FROM destinatarios WHERE activo=1")}
+            for r in _consultar("SELECT * FROM destinatarios WHERE activo=1 AND verificado=1")}
 
 
 def listar_destinatarios():
-    return _df("SELECT id_paciente, canal, destino, alta, activo FROM destinatarios ORDER BY alta DESC")
+    return _df("SELECT id_paciente, canal, destino, alta, activo, verificado FROM destinatarios ORDER BY alta DESC")
 
 
-def id_por_destino(canal, destino):
-    r = _consultar("SELECT id_paciente FROM destinatarios WHERE canal=? AND destino=? AND activo=1", (canal, str(destino)))
+def id_por_destino(canal, destino, solo_verificados=True):
+    sql = "SELECT id_paciente FROM destinatarios WHERE canal=? AND destino=? AND activo=1"
+    r = _consultar(sql + (" AND verificado=1" if solo_verificados else "") + " ORDER BY alta DESC", (canal, str(destino)))
     return r[0]["id_paciente"] if r else None
+
+
+# ------------------------------------------------------------------ pacientes (admisión)
+def registrar_paciente(id_paciente, edad, zona, subsidio, hipertension, diabetes, telefono, consentimiento):
+    _ejecutar("INSERT OR REPLACE INTO pacientes(id_paciente,edad,zona,subsidio,hipertension,diabetes,telefono,consentimiento,creado) "
+              "VALUES(?,?,?,?,?,?,?,?,?)", (str(id_paciente), int(edad), zona or "", int(subsidio), int(hipertension),
+                                            int(diabetes), telefono or "", int(consentimiento), ahora()))
+
+
+def obtener_paciente(id_paciente):
+    r = _consultar("SELECT * FROM pacientes WHERE id_paciente=?", (str(id_paciente),))
+    return r[0] if r else None
+
+
+def telefono_de_paciente(id_paciente):
+    """Teléfono registrado en admisión, o el cargado como destinatario de pruebas."""
+    p = obtener_paciente(id_paciente)
+    if p and p["telefono"]:
+        return p["telefono"]
+    r = _consultar("SELECT destino FROM destinatarios WHERE id_paciente=? AND canal='telefono' AND activo=1", (str(id_paciente),))
+    return r[0]["destino"] if r else None
+
+
+def listar_pacientes():
+    """Pacientes registrados con el estado de su vinculación a Telegram."""
+    return _df("""SELECT p.id_paciente, p.edad, p.zona, p.telefono, p.consentimiento, p.creado,
+                  CASE WHEN d.id_paciente IS NULL THEN 'Sin vincular'
+                       WHEN d.verificado=1 THEN 'Verificado' ELSE 'Pendiente de verificación' END AS vinculacion
+                  FROM pacientes p LEFT JOIN destinatarios d
+                    ON d.id_paciente=p.id_paciente AND d.canal='telegram' AND d.activo=1
+                  ORDER BY p.creado DESC""")
 
 
 def crear_vinculo(id_paciente, dias=7):
@@ -209,3 +252,4 @@ def leer(clave, defecto=None):
 
 def guardar(clave, valor):
     _ejecutar("INSERT OR REPLACE INTO sistema(clave,valor) VALUES(?,?)", (clave, str(valor)))
+

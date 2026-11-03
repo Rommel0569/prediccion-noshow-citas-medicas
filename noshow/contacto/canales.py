@@ -1,4 +1,4 @@
-"""Conectores de los canales de contacto: Telegram (envío y recepción de respuestas) y Twilio (SMS y llamadas).
+﻿"""Conectores de los canales de contacto: Telegram (envío y recepción de respuestas) y Twilio (SMS y llamadas).
 
 Las credenciales se leen de variables de entorno o de config/canales.local.yaml (fuera del repositorio).
 """
@@ -25,7 +25,8 @@ class Telegram:
 
     def _llamar(self, metodo, **datos):
         try:
-            r = requests.post(f"{self.base}/bot{self.token}/{metodo}", json=datos, timeout=TIEMPO_ESPERA)
+            r = requests.post(f"{self.base}/bot{self.token}/{metodo}", json=datos,
+                              timeout=TIEMPO_ESPERA + datos.get("timeout", 0))
             j = r.json()
         except (requests.RequestException, ValueError) as e:
             raise ErrorCanal(f"Telegram: {e}") from e
@@ -36,18 +37,26 @@ class Telegram:
     def info(self):
         return self._llamar("getMe")
 
-    def enviar(self, chat_id, texto, botones=None):
-        """Envía un mensaje; `botones` es una lista de filas de (texto, callback_data). Devuelve el id del mensaje."""
+    def enviar(self, chat_id, texto, botones=None, teclado=None):
+        """Envía un mensaje; `botones` es una lista de filas de (texto, callback_data) y `teclado` un reply_markup
+        propio (por ejemplo, pedir el contacto). Devuelve el id del mensaje."""
         datos = {"chat_id": chat_id, "text": texto}
-        if botones:
+        if teclado:
+            datos["reply_markup"] = teclado
+        elif botones:
             datos["reply_markup"] = {"inline_keyboard": [[{"text": t, "callback_data": d} for t, d in fila] for fila in botones]}
         return str(self._llamar("sendMessage", **datos)["message_id"])
 
-    def actualizaciones(self, offset=None):
-        datos = {"timeout": 0, "allowed_updates": ["message", "callback_query"]}
+    def actualizaciones(self, offset=None, espera=0):
+        """Novedades del bot; con `espera` > 0 la consulta queda abierta hasta que llegue algo (sondeo largo)."""
+        datos = {"timeout": int(espera), "allowed_updates": ["message", "callback_query"]}
         if offset is not None:
             datos["offset"] = offset
         return self._llamar("getUpdates", **datos)
+
+    def configurar_bot(self, descripcion, comandos):
+        self._llamar("setMyDescription", description=descripcion)
+        self._llamar("setMyCommands", commands=[{"command": c, "description": d} for c, d in comandos])
 
     def responder_callback(self, id_callback, texto):
         self._llamar("answerCallbackQuery", callback_query_id=id_callback, text=texto)
@@ -96,3 +105,4 @@ def cargar_canales():
         "telegram": Telegram(token, base) if token else None,
         "twilio": Twilio(sid, auth, desde, base_tw) if sid and auth and desde else None,
     }
+
