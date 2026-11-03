@@ -1,4 +1,4 @@
-"""Panel de control: resumen operativo de la agenda en gestión."""
+﻿"""Panel de control: resumen operativo de la agenda en gestión."""
 import matplotlib.pyplot as plt
 import streamlit as st
 
@@ -6,6 +6,10 @@ from interfaz import comun as c
 from noshow.impacto import resumen_agenda
 
 agenda, cfg = c.obtener_agenda()
+if agenda.empty:
+    c.encabezado("Panel de control", "Resumen operativo de la agenda en gestión")
+    c.aviso_sin_citas()
+    st.stop()
 r = resumen_agenda(agenda, {}, cfg)
 canal = agenda["canal_accion"]
 llamadas, visitas = int((canal == "llamada").sum()), int((canal == "visita").sum())
@@ -62,3 +66,4 @@ vista = c.vista_agenda(prior)[["N.° de cita", "Fecha de cita", "Anticipación (
                                "Riesgo", "Nivel", "Acción asignada", "Momento del contacto"]]
 st.dataframe(c.estilo_nivel(vista), hide_index=True, use_container_width=True, column_config=c.CONFIG_TABLA)
 st.page_link("paginas/contactos.py", label="Abrir la agenda de contactos completa", icon=":material/arrow_forward:")
+

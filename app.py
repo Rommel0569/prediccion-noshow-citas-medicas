@@ -8,21 +8,20 @@ from pathlib import Path
 
 import streamlit as st
 
-from interfaz import comun as c
-from noshow.contacto import servicio
-from noshow.contacto.canales import cargar_canales
-from noshow.contacto.equipo import cargar_equipo
-
 st.set_page_config(page_title="Gestión de Inasistencias", page_icon=":material/medical_services:", layout="wide")
-c.inyectar_estilos()
-st.logo(str(Path(__file__).parent / "interfaz" / "logo.svg"), size="large")
+
 
 def _acceso():
-    """Si APP_PASSWORD está definida (despliegue), exige la contraseña antes de mostrar cualquier dato."""
+    """Si APP_PASSWORD está definida (despliegue), exige la contraseña antes de mostrar cualquier dato.
+
+    Se resuelve antes de importar las librerías pesadas del sistema, para que la pantalla de acceso aparezca al instante.
+    """
     clave = os.getenv("APP_PASSWORD")
     if not clave or st.session_state.get("autenticado"):
         return True
-    c.encabezado("Gestión de Inasistencias", "Acceso restringido al personal del establecimiento")
+    st.markdown("<style>:root{color-scheme:light only !important;}</style>", unsafe_allow_html=True)
+    st.markdown("## Gestión de Inasistencias")
+    st.caption("Acceso restringido al personal del establecimiento")
     with st.form("acceso"):
         ingresada = st.text_input("Contraseña", type="password")
         entrar = st.form_submit_button("Ingresar", type="primary")
@@ -36,6 +35,14 @@ def _acceso():
 
 if not _acceso():
     st.stop()
+
+from interfaz import comun as c                       # noqa: E402  (importación diferida: librerías pesadas)
+from noshow.contacto import servicio                  # noqa: E402
+from noshow.contacto.canales import cargar_canales    # noqa: E402
+from noshow.contacto.equipo import cargar_equipo      # noqa: E402
+
+c.inyectar_estilos()
+st.logo(str(Path(__file__).parent / "interfaz" / "logo.svg"), size="large")
 
 if not c.MODELO.exists():
     st.error("No se encontró el modelo. Ejecute primero: python entrenar.py --config config/kaggle_brasil.yaml")
@@ -83,6 +90,3 @@ with st.sidebar:
         unsafe_allow_html=True)
 
 navegacion.run()
-
-
-

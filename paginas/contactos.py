@@ -29,6 +29,9 @@ agenda, cfg = c.obtener_agenda()
 if st.session_state.pop("agenda_error", None):
     st.error("El archivo no tiene el formato esperado; se muestra la agenda de demostración. "
              "Revise las columnas obligatorias en Incorporar establecimiento.")
+if agenda.empty:
+    c.aviso_sin_citas()
+    st.stop()
 if agenda["canal_simulado"].any():
     c.nota("El archivo no incluye el canal de contacto disponible: en este entorno se asigna con las proporciones de "
            "conectividad del INEI (II trimestre 2025).")
@@ -99,6 +102,7 @@ with st.container(border=True):
                              "id_cita": "N.° de cita", "id_paciente": "N.° de historia", "tipo": "Tipo", "destino": "Destino",
                              "estado": "Estado", "fecha_cita": "Fecha de cita", "nivel": "Nivel"}),
                          hide_index=True, use_container_width=True, height=300)
+
 
 
 

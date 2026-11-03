@@ -1,6 +1,7 @@
 ﻿"""Utilidades compartidas: carga del modelo, parámetros de operación, agenda procesada y componentes visuales."""
 import copy
 import io
+import os
 import json
 from pathlib import Path
 
@@ -31,6 +32,7 @@ AZUL, AZUL_CLARO, GRIS = "#1F4E79", "#5B8DB8", "#9AA5B1"
 
 CSS = """
 <style>
+:root{color-scheme:light only !important;}
 .block-container{padding-top:2.2rem;padding-bottom:3rem;max-width:1280px;}
 header[data-testid="stHeader"]{background:transparent;}
 footer{visibility:hidden;}
@@ -233,15 +235,27 @@ def _procesar(contenido, cfg_json):
     return ordenar_por_prioridad(recomendar(df, p, sistema.nivel(p), cfg, sistema.info))
 
 
+def en_nube():
+    """En la nube (Postgres) la agenda sale de las citas registradas; la demostración de 8 895 citas no se carga."""
+    from noshow.contacto import almacen
+    return almacen.usa_postgres() or bool(os.getenv("NOSHOW_SIN_DEMO"))
+
+
 def obtener_agenda():
-    """Agenda vigente (cargada por el usuario o de demostración) ya priorizada, y la configuración usada."""
+    """Agenda vigente (de las citas registradas, cargada por el usuario o de demostración) ya priorizada, y la configuración.
+
+    En la nube, si no hay citas registradas ni archivo cargado, devuelve una agenda vacía (las páginas lo avisan)."""
     cfg = cfg_activa()
+    if en_nube() and not st.session_state.get("agenda_bytes"):
+        st.session_state.setdefault("fuente_agenda", "registradas")
     if st.session_state.get("fuente_agenda") == "registradas":
         from noshow.contacto import agenda_db
         ag = agenda_db.construir(cargar_sistema(), cfg, pd.Timestamp.today(), estados=("agendada", "confirmada", "reprogramacion_solicitada"))
         if not ag.empty:
             ag["canal_simulado"] = False
             return ag, cfg
+        if en_nube():
+            return pd.DataFrame(), cfg
         st.session_state["fuente_agenda"] = "archivo"
     cfg_json = json.dumps(cfg, sort_keys=True, default=str)
     try:
@@ -251,6 +265,11 @@ def obtener_agenda():
         st.session_state.pop("agenda_nombre", None)
         st.session_state["agenda_error"] = str(e)
         return _procesar(None, cfg_json), cfg
+
+
+def aviso_sin_citas():
+    st.info("Todavía no hay citas registradas. Registre pacientes en Admisión de pacientes y agende sus citas en Programación de citas.",
+            icon=":material/info:")
 
 
 def origen_agenda():
@@ -280,5 +299,6 @@ CONFIG_TABLA = {
     "Riesgo": st.column_config.ProgressColumn("Riesgo", min_value=0, max_value=1, format="percent"),
     "Costo (S/)": st.column_config.NumberColumn("Costo (S/)", format="%.2f"),
 }
+
 
 

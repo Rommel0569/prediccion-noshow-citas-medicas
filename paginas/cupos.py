@@ -27,9 +27,12 @@ p3.markdown('<div class="paso"><b>3. Reasignación</b><span>El cupo liberado pas
             'espera en la misma especialidad.</span></div>', unsafe_allow_html=True)
 
 hay_registro = not almacen.listar_contactos().empty
-modo = st.radio("Origen de las respuestas", ["Registro de contactos", "Simulación"], horizontal=True,
+modo = st.radio("Origen de las respuestas", ["Registro de contactos", "Simulación"], horizontal=True, disabled=agenda.empty,
                 index=0 if hay_registro else 1,
                 help="El registro usa las respuestas reales de los pacientes. La simulación sirve para probar sin contactos.")
+
+if agenda.empty:        # sin citas cargadas solo se puede trabajar con el registro real
+    modo = "Registro de contactos"
 
 # ====================================================================== registro real
 if modo == "Registro de contactos":
@@ -118,6 +121,7 @@ else:
         ("Costo de contacto (S/)", c.num(total["costo_total_contacto"], 2)),
         ("Valor de consultas recuperadas (S/)", c.num(total["valor_consultas_recuperadas"], 2)),
     ], columns=["Indicador", "Valor"]), hide_index=True, use_container_width=True)
+
 
 
 
