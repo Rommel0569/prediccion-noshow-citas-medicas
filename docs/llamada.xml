@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+  <Pause length="1"/>
+  <Say voice="Polly.Mia" language="es-MX">Hola, le llamamos de Consulta externa.</Say>
+  <Pause length="1"/>
+  <Say voice="Polly.Mia" language="es-MX">Le recordamos que tiene una cita médica próxima.</Say>
+  <Pause length="1"/>
+  <Say voice="Polly.Mia" language="es-MX">Si no podrá asistir, comuníquese con admisión para liberar su cupo a otro paciente.</Say>
+  <Pause length="1"/>
+  <Say voice="Polly.Mia" language="es-MX">Gracias, que tenga un buen día.</Say>
+  <Pause length="1"/>
+</Response>

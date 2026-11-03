@@ -19,3 +19,13 @@ servicios:             # especialidades disponibles al agendar una cita
   - Gastroenterología
   - Neumología
   - Psiquiatría
+
+# Llamada con mensaje hablado (cuenta de prueba de Twilio: el mensaje se publica como archivo; ver generar_llamada.py)
+llamada:
+  voz: "Polly.Mia"        # voz de Twilio (Amazon Polly). Español: Polly.Mia (México), Polly.Andres-Neural (México, hombre), Polly.Lupe (EE. UU.), Polly.Lucia (España)
+  idioma: "es-MX"
+  frases:                 # cada frase se dice por separado, con una pausa
+    - "Hola, le llamamos de {establecimiento}."
+    - "Le recordamos que tiene una cita médica próxima."
+    - "Si no podrá asistir, comuníquese con admisión para liberar su cupo a otro paciente."
+    - "Gracias, que tenga un buen día."

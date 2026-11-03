@@ -96,7 +96,7 @@ class Twilio:
     def llamar(self, a, texto):
         """Llamada con un mensaje hablado (sin captura de respuesta). Con `url_llamada` usa esa URL de TwiML."""
         if self.url_llamada:
-            return self._crear("Calls", {"To": a, "From": self.desde, "Url": self.url_llamada})
+            return self._crear("Calls", {"To": a, "From": self.desde, "Url": self.url_llamada, "Method": "GET"})
         twiml = f'<Response><Say language="es-MX" voice="alice">{escape(texto)}</Say></Response>'
         return self._crear("Calls", {"To": a, "From": self.desde, "Twiml": twiml})
 
@@ -120,6 +120,7 @@ def cargar_canales():
                        os.getenv("TWILIO_URL_LLAMADA") or tw.get("url_llamada"))
         if sid and auth and desde else None,
     }
+
 
 
 
