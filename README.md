@@ -1,4 +1,4 @@
-# Prototipo: predicción de inasistencia a citas médicas con recomendación por canal y reasignación de cupos
+﻿# Prototipo: predicción de inasistencia a citas médicas con recomendación por canal y reasignación de cupos
 
 Proyecto del curso Gestión de Sistemas y Tecnologías de Información (UNSA). El sistema estima la probabilidad de
 que un paciente falte a su cita, la clasifica en riesgo **bajo / medio / alto**, recomienda la acción de contacto
@@ -48,16 +48,18 @@ python probar_casos.py
 
 Corre 100 casos de prueba variados de Arequipa (distritos, especialidades, horas, canales y esperas) con 11 verificaciones automáticas.
 
-Abre el prototipo en el navegador (http://localhost:8501), que tiene cinco pestañas:
+Abre la aplicación en el navegador (http://localhost:8501). La navegación lateral sigue el flujo de trabajo:
 
-| Pestaña | Qué hace |
-|---|---|
-| 1. Evaluar una cita | Busca al paciente por N.° de historia y trae sus datos e inasistencias previas (o se llenan a mano). Calcula el % de riesgo, el nivel, los 3 factores que más influyeron (SHAP) y la acción, el canal, el momento y el costo |
-| 2. Agenda | Prioriza una agenda (CSV propio o la de demostración), calcula las inasistencias evitables y el costo total, y permite descargarla |
-| 3. Reasignación de cupos | Libera los cupos de riesgo alto que no confirmaron y los asigna a la lista de espera por antigüedad |
-| 4. Desempeño del modelo | Muestra la mejora frente a no usar modelo (regla 80/20), AUC, ROC, importancia, desempeño por tramo, si sirve avisar (efecto del SMS por anticipación y por riesgo), la prueba de modelos por grupo y los escenarios |
-| 5. Aplicar en otro lugar | Lista las columnas requeridas, permite descargar las plantillas, verifica un archivo y lo recalibra |
-
+| Sección | Página | Qué hace |
+|---|---|---|
+| Operación | Panel de control | Resumen de la agenda: citas, inasistencias esperadas y evitables, contactos asignados, costos y citas prioritarias |
+| Operación | Programación de citas | Al agendar: busca al paciente por N.° de historia, calcula el riesgo, el nivel, los factores determinantes (SHAP) y la acción, canal, momento y costo |
+| Operación | Agenda y contactos | Cola de trabajo priorizada, con filtros y exportación a CSV; permite cargar una agenda propia |
+| Operación | Confirmaciones y cupos | Libera los cupos no confirmados y los reasigna a la lista de espera por antigüedad |
+| Análisis | Indicadores de gestión | Comparativo de estrategias de contacto, efecto del recordatorio y escenarios |
+| Análisis | Calidad del modelo | AUC, curva ROC, importancia, desempeño por anticipación y pruebas automáticas |
+| Administración | Configuración | Capacidad de llamadas y costos por canal (se aplican a toda la sesión) |
+| Administración | Incorporar establecimiento | Plantillas, verificación de un archivo y recalibración con datos locales |
 ## 3. Estructura
 
 ```
@@ -77,7 +79,9 @@ noshow/                    paquete del sistema
   cupos.py                 confirmación, liberación y reasignación a la lista de espera
   impacto.py               indicadores de costo-efectividad, efecto del SMS y escenarios
 entrenar.py / recalibrar.py / experimentos.py / evaluar.py / probar_casos.py  comandos de consola
-app.py                     interfaz (Streamlit)
+app.py                     aplicación web (Streamlit): navegación y tema
+interfaz/                  estilos y componentes compartidos
+paginas/                   una página por módulo (panel, programar, contactos, cupos, ...)
 modelos/                   modelo entrenado y reporte de métricas
 ```
 
@@ -165,3 +169,4 @@ en este repositorio: descárguelo de https://www.kaggle.com/datasets/joniarroba/
 `datos/KaggleV2-May-2016.csv` solo si desea reentrenar (`python entrenar.py --config config/kaggle_brasil.yaml`).
 Los archivos derivados incluidos (`modelos/sistema_historial.csv.gz`, `datos/agenda_demo.csv`, etc.) provienen de ese dataset y
 se comparten bajo la misma licencia, con atribución. Uso académico, sin pacientes reales.
+
