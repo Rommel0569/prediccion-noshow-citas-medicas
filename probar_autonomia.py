@@ -98,6 +98,12 @@ llamo_b = [c for c in estado.llamadas if c["To"] == "+51900000002"]
 verificar("quien no respondió y está cerca recibe llamada", len(estado.llamadas) > llamadas_antes or llamo_b
           or (contactos_de("B")["tipo"] == "llamada").any())
 
+# --- Twilio en cuenta de prueba: usa la plantilla predefinida en lugar del texto propio
+canales["twilio"].plantilla_sms = "sms_appointment_reminders"
+canales["twilio"].sms("+51900000009", "texto propio que la cuenta de prueba no admite")
+verificar("con plantilla_sms el SMS envia el código de plantilla (cuenta de prueba)", estado.sms[-1]["Body"] == "sms_appointment_reminders")
+canales["twilio"].plantilla_sms = None
+
 # --- resiliencia: un canal caído no detiene el servicio
 servidor.shutdown(); servidor.server_close()
 almacen.registrar_paciente("G", 30, "", 0, 0, 0, "", 1); almacen.registrar_destinatario("G", "telegram", 1007)
@@ -110,4 +116,5 @@ except Exception:
 
 print(f"\n{sum(resultados)}/{len(resultados)} verificaciones correctas")
 raise SystemExit(0 if all(resultados) else 1)
+
 

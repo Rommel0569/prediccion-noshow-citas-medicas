@@ -74,8 +74,9 @@ class Telegram:
 class Twilio:
     nombre = "twilio"
 
-    def __init__(self, sid, token, desde, base="https://api.twilio.com"):
+    def __init__(self, sid, token, desde, base="https://api.twilio.com", plantilla_sms=None):
         self.sid, self.token, self.desde, self.base = sid, token, desde, base.rstrip("/")
+        self.plantilla_sms = plantilla_sms      # cuenta de prueba: solo admite plantillas predefinidas (el texto lo fija Twilio)
 
     def _crear(self, recurso, datos):
         try:
@@ -89,7 +90,7 @@ class Twilio:
         return j["sid"]
 
     def sms(self, a, texto):
-        return self._crear("Messages", {"To": a, "From": self.desde, "Body": texto})
+        return self._crear("Messages", {"To": a, "From": self.desde, "Body": self.plantilla_sms or texto})
 
     def llamar(self, a, texto):
         """Llamada con un mensaje hablado (sin captura de respuesta)."""
@@ -112,7 +113,9 @@ def cargar_canales():
     base_tw = os.getenv("TWILIO_API_BASE") or tw.get("base_url") or "https://api.twilio.com"
     return {
         "telegram": Telegram(token, base) if token else None,
-        "twilio": Twilio(sid, auth, desde, base_tw) if sid and auth and desde else None,
+        "twilio": Twilio(sid, auth, desde, base_tw, os.getenv("TWILIO_PLANTILLA_SMS") or tw.get("plantilla_sms"))
+        if sid and auth and desde else None,
     }
+
 
 
