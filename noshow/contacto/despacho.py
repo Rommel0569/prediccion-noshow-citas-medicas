@@ -29,8 +29,10 @@ def _tipo(fila):
     return None
 
 
-def _destino(tipo, id_pac, dest, canales, llamada_automatica):
+def _destino(tipo, id_pac, dest, canales, llamada_automatica, manual=False):
     """Canal por el que se contactará a este paciente según lo que tiene verificado."""
+    if manual:
+        return "Personal (manual)"
     telefono, telegram = dest.get((id_pac, "telefono")), dest.get((id_pac, "telegram"))
     if tipo == "visita":
         return "Personal (manual)"
@@ -43,7 +45,7 @@ def _destino(tipo, id_pac, dest, canales, llamada_automatica):
     return "Sin destino registrado"
 
 
-def plan(agenda, canales, referencia, ignorar_ventana=False, llamada_automatica=False):
+def plan(agenda, canales, referencia, ignorar_ventana=False, llamada_automatica=False, manual=False):
     """Una fila por contacto previsto, con su destino y si está listo para ejecutarse."""
     existentes = almacen.contactos_existentes()
     dest = almacen.destinatarios_activos()
@@ -55,7 +57,7 @@ def plan(agenda, canales, referencia, ignorar_ventana=False, llamada_automatica=
             continue
         id_cita, id_pac = limpiar_id(r["id_cita"]), limpiar_id(r["id_paciente"])
         dias = (pd.Timestamp(r["fecha_cita"]).normalize() - referencia).days
-        destino = _destino(tipo, id_pac, dest, canales, llamada_automatica)
+        destino = _destino(tipo, id_pac, dest, canales, llamada_automatica, manual)
         if (id_cita, tipo) in existentes:
             estado = "Ya gestionado"
         elif dias < 0:
@@ -106,6 +108,18 @@ def _enlace_bot(canales, id_paciente):
 def _texto_sms(tipo, f, servicio, establecimiento, enlace):
     base = (mensajes.confirmacion if tipo == "confirmacion" else mensajes.recordatorio)(f, servicio, establecimiento)
     return base + (f" Responda por Telegram: {enlace}" if enlace else " Si no puede asistir, comuníquese con admisión.")
+
+
+def guiones(plan_df, establecimiento):
+    """Texto y teléfono de cada contacto manual listo, para que el personal llame o escriba por su cuenta."""
+    dest = almacen.destinatarios_activos()
+    filas = []
+    for r in plan_df[(plan_df["estado"] == "Listo") & (plan_df["destino"] == "Personal (manual)")].to_dict("records"):
+        f, s = r["fecha_cita"], r["servicio"]
+        fn = mensajes.llamada if r["tipo"] == "llamada" else mensajes.confirmacion if r["tipo"] == "confirmacion" else mensajes.recordatorio
+        filas.append({"N.° de cita": r["id_cita"], "N.° de historia": r["id_paciente"], "Tipo": ETIQUETA_TIPO[r["tipo"]],
+                      "Teléfono": dest.get((r["id_paciente"], "telefono"), ""), "Mensaje": fn(f, s, establecimiento)})
+    return pd.DataFrame(filas, columns=["N.° de cita", "N.° de historia", "Tipo", "Teléfono", "Mensaje"])
 
 
 def ejecutar(plan_df, canales, establecimiento, limite=None):
