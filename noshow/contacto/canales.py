@@ -90,15 +90,33 @@ class Twilio:
             raise ErrorCanal(f"Twilio: {j.get('message', r.status_code)}")
         return j["sid"]
 
+    @staticmethod
+    def _es_restriccion_prueba(e):
+        m = str(e).lower()
+        return "trial" in m or "disallowed parameters" in m
+
     def sms(self, a, texto):
-        return self._crear("Messages", {"To": a, "From": self.desde, "Body": self.plantilla_sms or texto})
+        try:
+            return self._crear("Messages", {"To": a, "From": self.desde, "Body": self.plantilla_sms or texto})
+        except ErrorCanal as e:
+            if self.plantilla_sms or not self._es_restriccion_prueba(e):
+                raise
+            # cuenta de prueba: no admite texto propio; reintenta con la plantilla predefinida de Twilio
+            self.plantilla_sms = "sms_appointment_reminders"
+            return self._crear("Messages", {"To": a, "From": self.desde, "Body": self.plantilla_sms})
 
     def llamar(self, a, texto):
         """Llamada con un mensaje hablado (sin captura de respuesta). Con `url_llamada` usa esa URL de TwiML."""
         if self.url_llamada:
             return self._crear("Calls", {"To": a, "From": self.desde, "Url": self.url_llamada})
         twiml = f'<Response><Say language="es-MX" voice="alice">{escape(texto)}</Say></Response>'
-        return self._crear("Calls", {"To": a, "From": self.desde, "Twiml": twiml})
+        try:
+            return self._crear("Calls", {"To": a, "From": self.desde, "Twiml": twiml})
+        except ErrorCanal as e:
+            if self._es_restriccion_prueba(e):
+                raise ErrorCanal("Twilio (cuenta de prueba): no admite mensaje propio en llamadas; configure "
+                                 "url_llamada (ejecute generar_llamada.py y publique docs/llamada.xml) o mejore la cuenta") from None
+            raise
 
 
 def cargar_canales():
