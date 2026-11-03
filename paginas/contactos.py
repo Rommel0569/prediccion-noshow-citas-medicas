@@ -77,7 +77,9 @@ with st.container(border=True):
     auto = False
     if canales["twilio"]:
         auto = st.toggle("Usar llamada automática cuando el paciente tiene teléfono registrado", value=False)
-    prog = despacho.plan(agenda, canales, referencia, ignorar, auto)
+    manual = st.toggle("Modo manual: yo hago las llamadas y mensajes", value=False,
+                       help="No envía nada por Twilio ni Telegram: deja los contactos como pendientes y muestra el texto para enviarlo a mano.")
+    prog = despacho.plan(agenda, canales, referencia, ignorar, auto, manual)
     if prog.empty:
         st.write("No hay contactos previstos en esta agenda.")
     else:
@@ -96,6 +98,13 @@ with st.container(border=True):
             for er in errores[:5]:
                 st.error(er)
             c.nota("El seguimiento está en Registro de contactos.")
+        if manual:
+            gui = despacho.guiones(prog, parametros.establecimiento())
+            if not gui.empty:
+                c.seccion("Mensajes para enviar a mano")
+                st.dataframe(gui, hide_index=True, use_container_width=True, height=300)
+                st.download_button("Descargar mensajes (CSV)", gui.to_csv(index=False).encode("utf-8-sig"), "contactos_manuales.csv",
+                                   "text/csv", icon=":material/download:")
         with st.expander("Detalle del plan"):
             st.dataframe(prog.assign(tipo=prog["tipo"].map(despacho.ETIQUETA_TIPO), fecha_cita=prog["fecha_cita"].dt.date)
                          .drop(columns=["servicio", "dias"]).rename(columns={
