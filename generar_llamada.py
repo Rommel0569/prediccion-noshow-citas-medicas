@@ -24,3 +24,4 @@ destino.parent.mkdir(exist_ok=True)
 destino.write_text("\n".join(lineas) + "\n", encoding="utf-8")
 print(f"Escrito {destino}\n")
 print(destino.read_text(encoding="utf-8"))
+
