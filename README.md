@@ -173,23 +173,26 @@ se comparten bajo la misma licencia, con atribución. Uso académico, sin pacien
 
 ## 8. Contacto real con los pacientes
 
-El sistema envía los recordatorios y recibe las respuestas de verdad, sin simulación, cuando hay un canal configurado:
+El sistema envía los recordatorios y recibe las respuestas de verdad cuando hay un canal configurado:
 
 | Canal | Qué hace | Costo |
 |---|---|---|
 | Telegram (bot) | Envía recordatorios con botones Confirmar / Cancelar / Reprogramar y registra la respuesta | Gratis |
 | Twilio (opcional) | SMS y llamadas con mensaje hablado | De pago; la cuenta de prueba solo llega a números verificados |
-| Personal | Llamadas y visitas: quedan como pendientes y el personal registra el resultado | — |
+| Personal | Llamadas y visitas: quedan como pendientes y el personal registra el resultado | - |
 
-Configuración (las credenciales **nunca** se suben al repositorio):
+### Puesta en marcha con su propio bot (5 pasos)
 
-1. Crear un bot con @BotFather en Telegram y copiar el token.
-2. Copiar `config/canales.ejemplo.yaml` como `config/canales.local.yaml` y pegar el token (o definir `TELEGRAM_BOT_TOKEN`).
-3. En la aplicación: *Canales de contacto* genera un enlace de un solo uso por paciente; al abrirlo en Telegram, el paciente
-   queda autorizado (consentimiento). Puede salir con `/baja`.
-4. *Agenda y contactos* ejecuta los envíos; *Registro de contactos* muestra respuestas y llamadas pendientes; *Confirmaciones y cupos*
-   libera los cupos y los ofrece a la lista de espera real.
+1. En Telegram, abra **@BotFather**, envíe `/newbot` y elija un nombre y un usuario que termine en `bot`. BotFather entrega un **token**.
+2. Copie `config/canales.ejemplo.yaml` como `config/canales.local.yaml` y pegue su token. También puede usar la variable de
+   entorno `TELEGRAM_BOT_TOKEN`.
+3. Inicie la aplicación (`streamlit run app.py`). En *Canales de contacto*, Telegram debe aparecer como *Configurado*;
+   pulse *Verificar conexión*.
+4. Genere un enlace de vinculación para un paciente de la agenda y ábralo en Telegram: el paciente queda autorizado.
+5. En *Agenda y contactos* ejecute los contactos; en *Registro de contactos* verá las respuestas.
 
-Los teléfonos del equipo para pruebas se cargan desde `config/equipo.local.csv` (ver `config/equipo.ejemplo.csv`), archivo ignorado por git.
-Los datos operativos se guardan en `datos/operacion.db` (SQLite, ignorado por git). `python probar_contacto.py` verifica el ciclo
-completo contra un servidor Telegram de pruebas (21 verificaciones).
+**Seguridad: nunca suba su token ni sus teléfonos al repositorio.** `config/canales.local.yaml`, `config/equipo.local.csv` y
+`datos/operacion.db` están en `.gitignore`. Quien tenga el token controla el bot; si se expone, revóquelo con `/revoke` en BotFather.
+
+Los teléfonos del equipo para pruebas se cargan desde `config/equipo.local.csv` (ver `config/equipo.ejemplo.csv`).
+`python probar_contacto.py` verifica el ciclo completo contra un servidor Telegram de pruebas (21 verificaciones).
