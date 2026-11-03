@@ -1,4 +1,4 @@
-# Plano de despliegue gratuito en Render (web + bot en un solo servicio). La base de datos está en Neon (Postgres gratis).
+﻿# Plano de despliegue gratuito en Render (web + bot en un solo servicio). La base de datos está en Neon (Postgres gratis).
 # Guía paso a paso: DESPLIEGUE.md
 services:
   - type: web
@@ -21,9 +21,5 @@ services:
         sync: false
       - key: APP_PASSWORD             # contraseña de acceso a la web
         sync: false
-      - key: TWILIO_ACCOUNT_SID       # opcional
-        sync: false
-      - key: TWILIO_AUTH_TOKEN
-        sync: false
-      - key: TWILIO_FROM
-        sync: false
+      # Twilio (opcional): agregue TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN y TWILIO_FROM después, en Environment del servicio.
+
