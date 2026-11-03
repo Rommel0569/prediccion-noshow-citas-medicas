@@ -1,0 +1,6 @@
+﻿telegram:
+  token: ""          # token que entrega @BotFather
+twilio:              # opcional (SMS y llamadas)
+  account_sid: ""
+  auth_token: ""
+  desde: ""          # número de origen, formato +1...

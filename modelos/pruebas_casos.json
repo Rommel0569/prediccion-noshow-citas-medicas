@@ -97,8 +97,8 @@
       "costo": 60.849
     }
   ],
-  "segundos_100_casos": 1.61,
-  "milisegundos_un_caso": 5.8,
+  "segundos_100_casos": 1.294,
+  "milisegundos_un_caso": 6.0,
   "resumen": {
     "llamadas": 20,
     "mensajes": 58,

@@ -109,6 +109,11 @@ def badge_nivel(nivel):
             f'{NIVELES[nivel].upper()}</span>')
 
 
+def estado_html(texto, ok):
+    fondo, color = ("#D1FADF", "#067647") if ok else ("#EEF1F5", "#667085")
+    return f'<span class="badge" style="background:{fondo};color:{color}">{texto.upper()}</span>'
+
+
 def estilo_nivel(df, columna="Nivel"):
     inverso = {v: k for k, v in NIVELES.items()}
 

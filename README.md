@@ -170,3 +170,26 @@ en este repositorio: descárguelo de https://www.kaggle.com/datasets/joniarroba/
 Los archivos derivados incluidos (`modelos/sistema_historial.csv.gz`, `datos/agenda_demo.csv`, etc.) provienen de ese dataset y
 se comparten bajo la misma licencia, con atribución. Uso académico, sin pacientes reales.
 
+
+## 8. Contacto real con los pacientes
+
+El sistema envía los recordatorios y recibe las respuestas de verdad, sin simulación, cuando hay un canal configurado:
+
+| Canal | Qué hace | Costo |
+|---|---|---|
+| Telegram (bot) | Envía recordatorios con botones Confirmar / Cancelar / Reprogramar y registra la respuesta | Gratis |
+| Twilio (opcional) | SMS y llamadas con mensaje hablado | De pago; la cuenta de prueba solo llega a números verificados |
+| Personal | Llamadas y visitas: quedan como pendientes y el personal registra el resultado | — |
+
+Configuración (las credenciales **nunca** se suben al repositorio):
+
+1. Crear un bot con @BotFather en Telegram y copiar el token.
+2. Copiar `config/canales.ejemplo.yaml` como `config/canales.local.yaml` y pegar el token (o definir `TELEGRAM_BOT_TOKEN`).
+3. En la aplicación: *Canales de contacto* genera un enlace de un solo uso por paciente; al abrirlo en Telegram, el paciente
+   queda autorizado (consentimiento). Puede salir con `/baja`.
+4. *Agenda y contactos* ejecuta los envíos; *Registro de contactos* muestra respuestas y llamadas pendientes; *Confirmaciones y cupos*
+   libera los cupos y los ofrece a la lista de espera real.
+
+Los teléfonos del equipo para pruebas se cargan desde `config/equipo.local.csv` (ver `config/equipo.ejemplo.csv`), archivo ignorado por git.
+Los datos operativos se guardan en `datos/operacion.db` (SQLite, ignorado por git). `python probar_contacto.py` verifica el ciclo
+completo contra un servidor Telegram de pruebas (21 verificaciones).

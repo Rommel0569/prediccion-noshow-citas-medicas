@@ -21,12 +21,15 @@ with st.form("form_parametros"):
     lla = d.number_input("Llamada (S/)", 0.0, 100.0, float(vigente["llamada"]), 0.1, format="%.2f")
     vis = e.number_input("Visita domiciliaria (S/)", 0.0, 500.0, float(vigente["visita"]), 1.0, format="%.2f")
     consulta = st.number_input("Valor de una consulta perdida (S/)", 0.0, 1000.0, float(vigente["consulta"]), 1.0, format="%.2f")
+    nombre = st.text_input("Nombre del establecimiento (aparece en los mensajes a los pacientes)",
+                           st.session_state.get("establecimiento", "Consulta externa"))
     g1, g2 = st.columns([1, 5])
     guardar = g1.form_submit_button("Aplicar cambios", type="primary")
     restablecer = g2.form_submit_button("Restablecer valores del archivo")
 if guardar:
     st.session_state["parametros"] = {"capacidad": cap, "sms": sms, "whatsapp": wsp, "llamada": lla, "visita": vis,
                                       "consulta": consulta}
+    st.session_state["establecimiento"] = nombre.strip() or "Consulta externa"
     st.success("Parámetros aplicados. La agenda se recalcula con los nuevos valores.")
 elif restablecer:
     st.session_state.pop("parametros", None)
